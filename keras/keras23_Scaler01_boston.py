@@ -7,4 +7,6 @@ datasets = load_boston()
 x=datasets['data']
 y=datasets['target']
 
+print(type(x))
 print(x)
+print(x,x)

@@ -58,9 +58,9 @@ print(test_csv.isnull().sum())
 submission = pd.read_csv(path+'submission.csv',index_col=0)
 submission['count'] =y_submit
 print(submission)
-substr='submission_'
-for i in layer123:
-    substr+=str(i)
-substr+=str(epo)+'.csv'
-submission.to_csv(path_save+substr)
+# substr='submission_'
+# for i in layer123:
+#     substr+=str(i)
+# substr+=str(epo)+'.csv'
+# submission.to_csv(path_save+substr)
 #mrmes:45.17439031380902 mlay:6,7,2 mepo:3200

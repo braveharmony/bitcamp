@@ -4,7 +4,7 @@ import numpy as np
 from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Dense,LeakyReLU
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler,StandardScaler,MaxAbsScaler,RobustScaler # 일요일날 같이 보내기!
 from matplotlib import pyplot as plt
 import random
 seed=0
@@ -19,9 +19,10 @@ y=datasets['target']
 feat=datasets['feature_names']
 print(datasets.DESCR)
 scaler=MinMaxScaler()
-scaler.fit(x)
-x=scaler.transform(x)
 x_train,x_test,y_train,y_test=train_test_split(x,y,train_size=0.8,random_state=seed)
+scaler.fit(x_train)
+x_train=scaler.transform(x_train)
+x_test=scaler.transform(x_test)
 
 # 2. model build
 model=Sequential()

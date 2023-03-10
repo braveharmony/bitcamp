@@ -1,0 +1,10 @@
+넘파이,TF2(keras) 기본적인 기능들 배움
+matplotlib를 통한 기본적인 시각화 배움
+sklearn을 통한 dataset로드 방법을 배움
+sklearn의 model_selection라이브러리를 통해 train데이터와 test데이터를 split하는 법을 배움
+sklearn의 metrics를 통한 ML의 성능지표 활용법을 배움
+pandas라이브러리를 통해 csv를 읽는 법을 배움
+pandas라이브러리에서 데이터를 drop하는 방법을 배움
+pandas를 딕셔너리 자료형이랑 유사하게 사용하는 법을 배움
+pandas자료형을 to csv를 통해서 csv파일로 변환 시키는 법을 배움
+그 이외에도 isnull method나 columns method등에 대해서 배움

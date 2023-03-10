@@ -1,0 +1,11 @@
+import pandas as pd
+
+path='./_data/DDarungkaggle/'
+df=pd.read_csv(path+'train.csv',index_col=0)
+print(df)
+print(df.isnull().sum())
+fig=df.columns
+x=df.drop([fig[-1]],axis=1)
+y=df[fig[-1]]
+print(x.shape,y.shape)
+print(fig)

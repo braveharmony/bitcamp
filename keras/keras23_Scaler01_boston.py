@@ -9,4 +9,3 @@ y=datasets['target']
 
 print(type(x))
 print(x)
-print(x,x)

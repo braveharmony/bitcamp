@@ -16,6 +16,7 @@ y = np.array([1,2,3])
 model=Sequential()
 model.add(Dense(5,input_dim=1))
 model.add(Dense(4))
+
 model.add(Dense(3))
 model.add(Dense(2))
 model.add(Dense(1))

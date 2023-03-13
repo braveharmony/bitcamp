@@ -42,6 +42,7 @@ dense3=Dense(32,activation='relu')(dense2)
 dense4=Dense(64,activation='relu')(dense3)
 output1=Dense(1)(dense4)
 model= Model(inputs=input1,outputs=output1)
+model.summary()
 
 # 데이터가 3차원이면(시계열 데이터)
 # (1000,100,1)->>>input_shape(100,1)

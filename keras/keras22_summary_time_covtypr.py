@@ -29,6 +29,7 @@ model.add(Dense(7,activation='softmax'))
 # model.summary
 # sparse_categorical_crossentropy
 start_time=time.time()
+
 # 3. compile, build
 model.compile(loss='categorical_crossentropy'
               ,optimizer='adam',metrics=['acc'])

@@ -62,7 +62,7 @@ for i in range(1,2):
     model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['acc'])
     hist = model.fit(x_train,y_train,epochs=30000
             ,batch_size=len(x),validation_split=0.2,verbose=True
-            ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=100,restore_best_weights=True))
+            ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=200,restore_best_weights=True))
 
     # 4. predict, evaluate
     y_predict = np.argmax(model.predict(x_test),axis=1)+3

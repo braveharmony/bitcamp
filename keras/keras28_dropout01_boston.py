@@ -47,7 +47,7 @@ model.summary()
 model.compile(loss='mse',optimizer='adam')
 hist=model.fit(x_train,y_train,epochs=10000
           ,verbose=True,validation_split=0.2,batch_size=len(x)
-          ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=2000,restore_best_weights=True,verbose=True))
+          ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=200,restore_best_weights=True,verbose=True))
 
 # 4. predict,evaluate
 print(f'loss : {model.evaluate(x_test,y_test)}\n결정계수 : {r2_score(y_test,model.predict(x_test))}')
@@ -55,6 +55,6 @@ import matplotlib.pyplot as plt
 
 plt.plot(hist.history['loss'],label='loss')
 plt.plot(hist.history['val_loss'],label='val_loss')
-plt.ylim(0,100)
+
 plt.legend()
 plt.show()

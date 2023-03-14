@@ -27,3 +27,45 @@ print(df.columns,dft.columns)
 x=df.drop([df.columns[-1]],axis=1)
 y=df[df.columns[-1]]
 
+
+x_train,x_test,y_train,y_test=train_test_split(x,y,train_size=0.8,random_state=seed,shuffle=True,stratify=y)
+scaler=MinMaxScaler()
+x_train=scaler.fit_transform(x_train)
+x_test=scaler.transform(x_test)
+dft=scaler.transform(dft)
+
+# 2. model build
+input=Input(shape=(x.shape[1],))
+layer=Dense(32,activation=LeakyReLU(0.5))(input)
+layer=Dropout(0.05)(layer)
+layer=Dense(32,activation=LeakyReLU(0.5))(layer)
+layer=Dropout(0.05)(layer)
+layer=Dense(32,activation=LeakyReLU(0.5))(layer)
+layer=Dropout(0.05)(layer)
+layer=Dense(32,activation=LeakyReLU(0.5))(layer)
+layer=Dropout(0.05)(layer)
+layer=Dense(32,activation=LeakyReLU(0.5))(layer)
+layer=Dropout(0.05)(layer)
+layer=Dense(32,activation=LeakyReLU(0.5))(layer)
+layer=Dropout(0.05)(layer)
+layer=Dense(1,activation='sigmoid')(layer)
+model=Model(inputs=input,outputs=layer)
+model.summary()
+
+# 3. compile,training
+model.compile(loss='binary_crossentropy',optimizer='adam',metrics=['acc'])
+hist=model.fit(x_train,y_train,epochs=1
+          ,batch_size=len(x),validation_split=0.2,verbose=True
+          ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=50,verbose=True,restore_best_weights=True))
+
+# 4. predict,evaluate
+print(f'accuaracy : {accuracy_score(y_test,np.round(model.predict(x_test)))}')
+plt.subplot(1,2,1)
+plt.plot(hist.history['val_acc'],label='val_acc')
+plt.plot(hist.history['acc'],label='acc')
+plt.legend()
+plt.subplot(1,2,2)
+plt.plot(hist.history['val_loss'],label='val_loss')
+plt.plot(hist.history['loss'],label='loss')
+plt.legend()
+plt.show()

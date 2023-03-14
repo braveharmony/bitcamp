@@ -1,10 +1,10 @@
 ## mlp란 multi layer perceptron을 뜻한다.
 
-import numpy as np
-import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
 
+import tensorflow as tf
+
+
+import numpy as np
 # 1. 데이터
 x = np. array(
     [[1,1],
@@ -23,9 +23,12 @@ y = np.array([11,12,13,14,15,16,17,18,19,20])
 print(x.shape)  # (10,2) -> 2개의 특성을 가진 10개에 데이터
 print(y.shape)  # (10,) ->10개의 데이터
 
+from tensorflow.python.keras.models import Sequential
+from tensorflow.python.keras.layers import Dense
 # 2.모델구성
 model=Sequential()
 model.add(Dense(5, input_dim=2))
+model.add(Dense(5))
 model.add(Dense(1))
 
 # 3.컴파일,훈련

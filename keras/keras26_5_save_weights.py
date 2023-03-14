@@ -38,14 +38,16 @@ model=Model(inputs=input1,outputs=output1)
 model.summary()
 
 # model.save('./_save/keras26_1_save_model.h5')
+model.save_weights('./_save/keras26_5_save_weights1.h5')
 
 # 3. compile, training
 model.compile(loss='mse',optimizer='adam')
-model.fit(x,y,epochs=1000
+model.fit(x_train,y_train,epochs=10000
           ,batch_size=len(x),validation_split=0.2,verbose=True
-          ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=50,verbose=True))
+          ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=500,verbose=True,restore_best_weights=True))
 
-model.save('./_save/keras26_3_save_model.h5')
+# model.save('./_save/keras26_3_save_model.h5')
+model.save_weights('./_save/keras26_5_save_weights2.h5')
 
 # 4. predict,evaluate
 print(f'loss : {model.evaluate(x_test,y_test)}\n결정계수 : {r2_score(y_test,model.predict(x_test))}')

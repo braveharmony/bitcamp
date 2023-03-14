@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib as mpl
 import random, time
-from tensorflow.python.keras.models import Model
+from tensorflow.python.keras.models import Model,load_model
 from tensorflow.python.keras.layers import Dense,Input
 from tensorflow.python.keras.callbacks import EarlyStopping
 from sklearn.model_selection import train_test_split
@@ -36,16 +36,17 @@ Dense4=Dense(16,activation='relu')(Dense3)
 output1=Dense(1)(Dense4)
 model=Model(inputs=input1,outputs=output1)
 model.summary()
-
-# model.save('./_save/keras26_1_save_model.h5')
+ 
+model.load_weights('./_save/keras26_5_save_weights2.h5')
 
 # 3. compile, training
 model.compile(loss='mse',optimizer='adam')
-model.fit(x,y,epochs=1000
-          ,batch_size=len(x),validation_split=0.2,verbose=True
-          ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=50,verbose=True))
+# model.fit(x,y,epochs=1000
+#           ,batch_size=len(x),validation_split=0.2,verbose=True
+#           ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=50,verbose=True))
 
-model.save('./_save/keras26_3_save_model.h5')
+# model.save('./_save/keras26_3_save_model.h5')
+
 
 # 4. predict,evaluate
 print(f'loss : {model.evaluate(x_test,y_test)}\n결정계수 : {r2_score(y_test,model.predict(x_test))}')

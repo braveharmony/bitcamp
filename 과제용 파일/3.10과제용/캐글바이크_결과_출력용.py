@@ -10,7 +10,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import MinMaxScaler
 from matplotlib import pyplot as plt
-for i in range(30):
+for i in range(10):
     # 0. seed initialization
     seed=i
     random.seed(seed)
@@ -40,15 +40,17 @@ for i in range(30):
 
     # 2. model build
     model=Sequential()
-    model.add(Dense(32,input_dim=x.shape[1],activation=LeakyReLU(0.5)))
-    model.add(Dense(64,activation=LeakyReLU(0.5)))
+    model.add(Dense(32,input_dim=x.shape[1],activation=LeakyReLU(0.55)))
+    model.add(Dense(64,activation=LeakyReLU(0.55)))
+    model.add(Dense(32,activation=LeakyReLU(0.55)))
+    model.add(Dense(64,activation=LeakyReLU(0.55)))
     model.add(Dense(1))
 
 
     # 3. compile,training
     model.compile(loss='mse',optimizer='adam')
     es=EarlyStopping(monitor='val_loss',mode='min',patience=50,restore_best_weights=True)
-    hist=model.fit(x_train,y_train,batch_size=len(x),validation_split=0.2,verbose=True,callbacks=es,epochs=3000)
+    hist=model.fit(x_train,y_train,batch_size=len(x_train),validation_split=0.2,verbose=True,callbacks=es,epochs=3000)
 
 
     # 4. evaluate,predict
@@ -59,7 +61,7 @@ for i in range(30):
     # 5. save
     y_predict=model.predict(dft)
     dfs[df.columns[-1]]=y_predict
-    pathsave='./_save/kaggle_bike/03_10/'
+    pathsave='./_save/kaggle_bike/03_13/'
     dfs.to_csv(pathsave+f'forsub{i}.csv',index=False)
 
 # # 6. plot

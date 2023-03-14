@@ -10,7 +10,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import MinMaxScaler
 from matplotlib import pyplot as plt
-for i in range(30):
+for i in range(10):
     # 0. seed initialization
     seed=i
     random.seed(seed)
@@ -42,10 +42,10 @@ for i in range(30):
 
     # 2. model build
     model=Sequential()
-    model.add(Dense(32,input_dim=x.shape[1],activation=LeakyReLU(0.85)))
-    model.add(Dense(64,activation=LeakyReLU(0.85)))
-    model.add(Dense(32,activation=LeakyReLU(0.85)))
-    model.add(Dense(64,activation=LeakyReLU(0.85)))
+    model.add(Dense(32,input_dim=x.shape[1],activation=LeakyReLU(0.55)))
+    model.add(Dense(64,activation=LeakyReLU(0.55)))
+    model.add(Dense(32,activation=LeakyReLU(0.55)))
+    model.add(Dense(64,activation=LeakyReLU(0.55)))
     model.add(Dense(1))
 
     # 3. compile, training
@@ -61,11 +61,15 @@ for i in range(30):
     # 5. save
     y_predict=model.predict(dft)
     dfs[df.columns[-1]]=y_predict
-    pathsave='./_save/DDarung/03_10/'
+    pathsave='./_save/DDarung/03_13/'
     dfs.to_csv(pathsave+f'forsub{i}.csv',index=False)
 
 # # 6. plot
+# plt.subplot(1,2,1)
+# plt.plot(hist.history['val_loss'],label='val_loss')
 # plt.plot(hist.history['loss'],label='loss')
+# plt.legend()
+# plt.subplot(1,2,2)
 # plt.plot(hist.history['val_loss'],label='val_loss')
 # plt.legend()
 # plt.show()

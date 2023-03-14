@@ -27,16 +27,17 @@ scaler=MinMaxScaler()
 x_train=scaler.fit_transform(x_train)
 x_test=scaler.transform(x_test)
 
+# 2. model build
 model=load_model('./_save/keras26_3_save_model.h5')
 model.summary()
 
 # 3. compile, training
-# model.compile(loss='mse',optimizer='adam')
+model.compile(loss='mse',optimizer='adam')
 model.fit(x,y,epochs=1000
           ,batch_size=len(x),validation_split=0.2,verbose=True
           ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=50,verbose=True))
 
-model.save('./_save/keras26_3_save_model.h5')
+# model.save('./_save/keras26_3_save_model.h5')
 
 
 # 4. predict,evaluate

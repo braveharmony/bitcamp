@@ -13,7 +13,7 @@ from matplotlib import pyplot as plt
 from sklearn.datasets import fetch_california_housing
 
 # 0. seed initialization
-seed=1
+seed=2
 random.seed(seed)
 np.random.seed(seed)
 tf.random.set_seed(seed)

@@ -31,6 +31,8 @@ dft[df.columns[-1]]=le.transform(dft[df.columns[-1]])
 # x, y = ros.fit_resample(x, y)
 # print(np.unique(x['type'],return_counts=True))
 x_train,x_test,y_train,y_test=train_test_split(x,y,train_size=0.8,random_state=seed,stratify=y)
+x_train=x
+y_train=y
 scaler=RobustScaler()
 x_train=scaler.fit_transform(x_train)
 x_test=scaler.transform(x_test)
@@ -42,17 +44,17 @@ from tensorflow.python.keras.layers import Dense,Input,LeakyReLU,Dropout
 # 2. model build
 input1=Input(shape=(x.shape[1],))
 layer = Dense(32,activation=LeakyReLU(0.35))(input1)
-layer = Dropout(0.1)(layer)
+layer = Dropout(0.25)(layer)
 layer = Dense(32,activation=LeakyReLU(0.35))(layer)
-layer = Dropout(0.1)(layer)
+layer = Dropout(0.25)(layer)
 layer = Dense(32,activation=LeakyReLU(0.35))(layer)
-layer = Dropout(0.1)(layer)
+layer = Dropout(0.25)(layer)
 layer = Dense(32,activation=LeakyReLU(0.35))(layer)
+layer = Dropout(0.25)(layer)
+layer = Dense(32,activation=LeakyReLU(0.55))(layer)
 layer = Dropout(0.1)(layer)
-# layer = Dense(32,activation=LeakyReLU(0.25))(layer)
-# layer = Dropout(0.1)(layer)
-# layer = Dense(32,activation=LeakyReLU(0.25))(layer)
-# layer = Dropout(0.1)(layer)
+layer = Dense(32,activation=LeakyReLU(0.55))(layer)
+layer = Dropout(0.1)(layer)
 # layer = Dense(32,activation=LeakyReLU(0.85))(layer)
 # layer = Dropout(0.1)(layer)
 # layer = Dense(32,activation=LeakyReLU(0.85))(layer)
@@ -75,6 +77,7 @@ print(f'loss : {loss}\naccuarcy : {accuracy_score(np.argmax(y_test,axis=1)+3,np.
 
 dfs[df.columns[0]]=np.argmax(model.predict(dft),axis=1)+3
 dfs.to_csv('./_save/dacon_wine/03_15/forsub.csv',index=False)
+model.save('./_save/dacon_wine/03_15/forsub.h5')
 
 import matplotlib.pyplot as plt
 plt.subplot(1,2,1)

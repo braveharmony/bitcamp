@@ -1,11 +1,7 @@
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense,LeakyReLU
 import random
-import matplotlib as mpl
-from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as plt
+
 # 0.seed
 # seed=2
 # np.random.seed(seed)
@@ -13,12 +9,17 @@ import matplotlib.pyplot as plt
 # tf.random.set_seed(seed)
 
 # 1. Data
+
 x = np.array([i for i in range(1,21)])
 y = np.array([1,2,4,3,5,7,9,3,8,12,13,8,14,15,9,6,17,23,21,20])
 
-x_train,x_test,y_train,y_test=train_test_split(x,y,train_size=0.6,shuffle=True,random_state=1234)
+from sklearn.model_selection import train_test_split
+x_train,x_test,y_train,y_test=train_test_split(x,y
+                                ,train_size=0.6,shuffle=True,random_state=1234)
 
 # 2. Model Build
+from tensorflow.python.keras.models import Sequential
+from tensorflow.python.keras.layers import Dense,LeakyReLU
 model=Sequential()
 model.add(Dense(8,input_dim=1,activation='linear'))
 model.add(Dense(16,activation='sigmoid'))
@@ -35,10 +36,14 @@ model.fit(x_train,y_train,batch_size=100,epochs=1000)
 loss = model.evaluate(x_test,y_test)
 print(f'loss : {loss}')
 
-xx=np.array([np.linspace(-3,23,100)]).T
+xx=np.array([np.linspace(min(x)-3,max(x)+3,100)]).T
 yy_predict=model.predict(xx)
 
-plt.scatter(x_train,y_train,s=10,c='red')
-plt.scatter(x_test,y_test,s=10,c='green')
-plt.plot(xx,yy_predict)
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
+plt.scatter(x_train,y_train,s=10,c='red',label='train data')
+plt.scatter(x_test,y_test,s=10,c='green',label='test data')
+plt.plot(xx,model.predict(xx),label='model shape')
+plt.legend()
 plt.show()

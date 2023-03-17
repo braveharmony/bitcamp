@@ -1,0 +1,64 @@
+import tensorflow as tf
+import numpy as np
+import pandas as pd
+import matplotlib as mpl
+import random,time,datetime
+from tensorflow.keras.models import Model,Sequential
+from tensorflow.keras.layers import Dense,Input,Dropout,LeakyReLU
+from tensorflow.keras.callbacks import EarlyStopping
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder,RobustScaler
+from matplotlib import pyplot as plt
+
+# 0. seed initialization
+seed=0
+random.seed(seed)
+np.random.seed(seed)
+tf.random.set_seed(seed)
+
+# 1. data prepare
+path='./_data/dacon_wine/'
+df=pd.read_csv(path+'train.csv',index_col=0)
+dft=pd.read_csv(path+'test.csv',index_col=0)
+dfs=pd.read_csv(path+'sample_submission.csv')
+# print(df.columns,dft.columns)
+x=df.drop([df.columns[0]],axis=1)
+y=df[df.columns[0]]
+# print(x.shape,dft.shape,y.shape)
+# print(np.unique(x[df.columns[-1]]))
+labelencoder=LabelEncoder()
+x[df.columns[-1]]=labelencoder.fit_transform(x[df.columns[-1]])
+dft[df.columns[-1]]=labelencoder.transform(dft[df.columns[-1]])
+# print(np.unique(x[df.columns[-1]]),np.unique(dft[df.columns[-1]]))
+# x[df.columns[-1]]=labelencoder.inverse_transform(x[df.columns[-1]])
+# print(np.unique(x[df.columns[-1]]))
+
+x_train,x_test,y_train,y_test=train_test_split(x,y,train_size=0.8,random_state=seed,stratify=y,shuffle=True)
+Scaler=RobustScaler()
+x_train=Scaler.fit_transform(x_train)
+x_test=Scaler.transform(x_test)
+dft=Scaler.transform(dft)
+
+
+# 1. model initialization
+input=Input(shape=(x.shape[1],))
+layers=Dense(units=32,activation=LeakyReLU(0.2))(input)
+layers=Dropout(0.125)(layers)
+layers=Dense(units=64,activation=LeakyReLU(0.2))(layers)
+layers=Dropout(0.125)(layers)
+layers=Dense(units=128,activation=LeakyReLU(0.2))(layers)
+layers=Dropout(0.125)(layers)
+layers=Dense(units=64,activation=LeakyReLU(0.2))(layers)
+layers=Dropout(0.125)(layers)
+layers=Dense(units=128,activation=LeakyReLU(0.2))(layers)
+layers=Dropout(0.125)(layers)
+layers=Dense(units=y.shape[1],activation='softmax')(layers)
+model=Model(inputs=input,outputs=layers)
+model.summary()
+
+# 2. compile training
+model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['acc'])
+model.fit(x_train,y_train,epochs=1
+          ,batch_size=len(x),verbose=True,validation_split=0.2
+          ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=50))

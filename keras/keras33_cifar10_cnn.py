@@ -23,7 +23,7 @@ y_test=np.array(pd.get_dummies(y_test.T[0],prefix='number'))
 
 # 2. model build
 model=Sequential()
-model.add(Conv2D(filters=32
+model.add(Conv2D(filters=64
                  ,kernel_size=(3,3)
                  ,input_shape=(x_train.shape[1],x_train.shape[2],x_train.shape[3])
                  ,padding='same'
@@ -49,6 +49,8 @@ model.add(Conv2D(filters=512
                  ,activation='relu'))
 model.add(MaxPool2D(pool_size=(2,2)))
 model.add(Flatten())
+model.add(Dense(512,activation='relu'))
+model.add(Dropout(0.125))
 model.add(Dense(256,activation='relu'))
 model.add(Dropout(0.125))
 model.add(Dense(128,activation='relu'))
@@ -57,7 +59,7 @@ model.add(Dense(64,activation='relu'))
 model.add(Dropout(0.125))
 model.add(Dense(32,activation='relu'))
 model.add(Dropout(0.125))
-model.add(Dense(16,activation='relu'))
+model.add(Dense(32,activation='relu'))
 model.add(Dropout(0.125))
 model.add(Dense(10,activation='softmax'))
 model.summary()
@@ -72,5 +74,6 @@ model.fit(x_train,y_train,epochs=1000
 # 4. predict,evaluate
 date = datetime.datetime.now()
 date = date.strftime('%H시%M분')
-model.save(f'./_save/keras33/cifar10_{date}.h5')
-print(f'accuracy : {accuracy_score(np.argmax(y_test,axis=1),np.argmax(model.predict(x_test),axis=1))}')
+acc=accuracy_score(np.argmax(y_test,axis=1),np.argmax(model.predict(x_test),axis=1))
+model.save(f'./_save/keras33/cifar10_acc_{acc}_{date}.h5')
+print(f'accuracy : {acc}')

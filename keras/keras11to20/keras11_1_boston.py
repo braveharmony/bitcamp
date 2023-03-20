@@ -56,17 +56,17 @@ y_predict=model.predict(x_test)
 r2=r2_score(y_test,y_predict)
 print(f'r2_score : {r2}')
 
-# 번외. 플로팅
-atr=datasets.feature_names
-tar=['boston']
+# # 번외. 플로팅
+# atr=datasets.feature_names
+# tar=['boston']
 
-plt.figure(1)
-for i in range(len(atr)):
-    # plt.figure(atr[i])
-    plt.subplot(int(len(atr)//2.5),5,2*i+1)
-    plt.scatter(x.T[i],y,s=1)
-    min_x=min(x.T[i]);max_x=max(x.T[i]);min_y=min(y);max_y=max(y)
-    plt.xlim(min_x-0.05*abs(max_x-min_x),max_x+0.05*abs(max_x-min_x))
-    plt.ylim(min_y-0.05*abs(max_y-min_y),max_y+0.05*abs(max_y-min_y))
-    plt.ylabel(tar[0],fontsize=5);plt.xlabel(atr[i],fontsize=5);plt.title(atr[i],fontsize=5)
-plt.show()
+# plt.figure(1)
+# for i in range(len(atr)):
+#     # plt.figure(atr[i])
+#     plt.subplot(int(len(atr)//2.5),5,2*i+1)
+#     plt.scatter(x.T[i],y,s=1)
+#     min_x=min(x.T[i]);max_x=max(x.T[i]);min_y=min(y);max_y=max(y)
+#     plt.xlim(min_x-0.05*abs(max_x-min_x),max_x+0.05*abs(max_x-min_x))
+#     plt.ylim(min_y-0.05*abs(max_y-min_y),max_y+0.05*abs(max_y-min_y))
+#     plt.ylabel(tar[0],fontsize=5);plt.xlabel(atr[i],fontsize=5);plt.title(atr[i],fontsize=5)
+# plt.show()

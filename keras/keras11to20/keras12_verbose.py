@@ -7,7 +7,7 @@ from sklearn.metrics import r2_score
 import numpy as np
 import matplotlib as mpl
 from matplotlib import pyplot as plt
-from sklearn.datasets import load_boston
+from sklearn.datasets import fetch_california_housing
 import random
 
 # 0.seed
@@ -15,10 +15,10 @@ seed=0
 random.seed(seed)
 tf.random.set_seed(seed)
 np.random.seed(seed)
-verb=True
+
 
 # 1.데이터
-datasets=load_boston()
+datasets=fetch_california_housing()
 x=datasets.data
 y=np.array([datasets.target]).T
 x_train,x_test,y_train,y_test=train_test_split(x,y,train_size=0.7,random_state=seed)
@@ -26,11 +26,12 @@ print(x.shape,y.shape)
 
 # 2.모델 생성
 model=Sequential()
-model.add(Dense(1,input_dim=13))
+model.add(Dense(1,input_dim=x.shape[1]))
 
 # 3.컴파일,훈련
+verb=-False
 model.compile(loss='mse',optimizer='adam')
-model.fit(x_train,y_train,batch_size=1000,epochs=1,verbose=verb)
+model.fit(x_train,y_train,batch_size=1000,epochs=10,verbose=verb)
 
 # 4.평가,예측
 loss=model.evaluate(x_test,y_test,batch_size=1000,verbose=verb)

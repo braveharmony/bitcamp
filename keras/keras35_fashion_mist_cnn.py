@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib as mpl
 import random,time,datetime
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense,Dropout,Conv2D,MaxPool2D,Flatten,LeakyReLU
+from tensorflow.keras.layers import Dense,Dropout,Conv2D,MaxPool2D,Flatten
 from tensorflow.keras.callbacks import EarlyStopping
 from sklearn.metrics import accuracy_score
 from tensorflow.keras.datasets import fashion_mnist
@@ -30,42 +30,64 @@ y_test=np.array(pd.get_dummies(y_test,prefix='number'))/255.
 
 
 # 2. model building
+# model=Sequential()
+# model.add(Conv2D(input_shape=(x_train.shape[1],x_train.shape[2],x_train.shape[3])
+#                  ,filters=16
+#                  ,kernel_size=(3,3)
+#                  ,padding='same'
+#                  ,activation='relu'))
+# model.add(Conv2D(filters=16
+#                  ,kernel_size=(2,2)
+#                  ,strides=2
+#                  ,activation='relu'))
+# model.add(MaxPool2D((2,2)))
+# model.add(Conv2D(filters=32
+#                  ,kernel_size=(4,4)
+#                  ,padding='valid'
+#                  ,activation='relu'))
+# model.add(MaxPool2D((2,2)))
+# model.add(Conv2D(filters=64
+#                  ,kernel_size=(2,2)
+#                  ,padding='same'
+#                  ,activation='relu'))
+# model.add(MaxPool2D((2,2)))
+# model.add(Flatten())
+# model.add(Dense(32,activation='relu'))
+# model.add(Dropout(0.125))
+# model.add(Dense(32,activation='relu'))
+# model.add(Dropout(0.125))
+# model.add(Dense(y_train.shape[1],activation='softmax'))
+# model.summary()
 model=Sequential()
 model.add(Conv2D(input_shape=(x_train.shape[1],x_train.shape[2],x_train.shape[3])
                  ,filters=64
                  ,kernel_size=(3,3)
                  ,padding='same'
-                 ,activation=LeakyReLU(0.5)))
-model.add(Conv2D(filters=64
-                 ,kernel_size=(3,3)
-                 ,padding='same'
-                 ,activation=LeakyReLU(0.5)))
-model.add(MaxPool2D((2,2)))
+                 ,activation='relu'))
+model.add(MaxPool2D(pool_size=(2,2)))
 model.add(Conv2D(filters=128
                  ,kernel_size=(3,3)
                  ,padding='same'
-                 ,activation=LeakyReLU(0.5)))
-model.add(MaxPool2D((2,2)))
-model.add(Conv2D(filters=256
+                 ,activation='relu'))
+model.add(MaxPool2D(pool_size=(2,2)))
+model.add(Conv2D(filters=64
                  ,kernel_size=(4,4)
                  ,padding='valid'
-                 ,activation=LeakyReLU(0.5)))
-model.add(MaxPool2D((2,2)))
-model.add(Conv2D(filters=512
+                 ,activation='relu'))
+model.add(MaxPool2D(pool_size=(2,2)))
+model.add(Conv2D(filters=128
                  ,kernel_size=(2,2)
                  ,padding='same'
-                 ,activation=LeakyReLU(0.5)))
-model.add(MaxPool2D((2,2)))
+                 ,activation='relu'))
+model.add(MaxPool2D(2,2))
 model.add(Flatten())
-model.add(Dense(32,activation=LeakyReLU(0.5)))
+model.add(Dense(32,activation='relu'))
 model.add(Dropout(0.125))
-model.add(Dense(32,activation=LeakyReLU(0.5)))
+model.add(Dense(32,activation='relu'))
 model.add(Dropout(0.125))
-model.add(Dense(64,activation=LeakyReLU(0.5)))
+model.add(Dense(32,activation='relu'))
 model.add(Dropout(0.125))
-model.add(Dense(32,activation=LeakyReLU(0.5)))
-model.add(Dropout(0.125))
-model.add(Dense(y_train.shape[1],activation='softmax'))
+model.add(Dense(10,activation='softmax'))
 model.summary()
 
 # 3. compile, training

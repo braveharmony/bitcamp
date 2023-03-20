@@ -42,28 +42,29 @@ model.add(Dense(1))
 
 # 3. compile,training
 model.compile(loss='mse',optimizer='adam')
-model.fit(x_train,y_train,batch_size=1000,epochs=1)
+model.fit(x_train,y_train,batch_size=1000,epochs=1000)
 
-# # 4. evaluation,predict
-# loss=model.evaluate(x_test,y_test)
-# print(f'loss : {loss}')
-# y_predict=model.predict(x_test)
-# r2=r2_score(y_test,y_predict)
-# print(f'r2 score : {r2}')
-# # plt.figure(atr[i])
+# 4. evaluation,predict
+loss=model.evaluate(x_test,y_test)
+print(f'loss : {loss}')
+y_predict=model.predict(x_test)
+r2=r2_score(y_test,y_predict)
+print(f'r2 score : {r2}')
 
-# 플로팅
-import matplotlib as mpl
-import matplotlib.pyplot as plt
 
-atr=datasets.feature_names
-tar=datasets.target_names
+# # 플로팅
+# import matplotlib as mpl
+# import matplotlib.pyplot as plt
 
-for i in range(len(atr)):
-    plt.subplot(int(len(atr)//2.5),5,2*i+1)
-    plt.scatter(x.T[i],y,s=1)
-    min_x=min(x.T[i]);max_x=max(x.T[i]);min_y=min(y);max_y=max(y)
-    plt.xlim(min_x-0.05*abs(max_x-min_x),max_x+0.05*abs(max_x-min_x))
-    plt.ylim(min_y-0.05*abs(max_y-min_y),max_y+0.05*abs(max_y-min_y))
-    plt.ylabel(tar[0],fontsize=10);plt.xlabel(atr[i],fontsize=10);plt.title(atr[i],fontsize=10)
-plt.show()
+# plt.figure(atr[i])
+# atr=datasets.feature_names
+# tar=datasets.target_names
+
+# for i in range(len(atr)):
+#     plt.subplot(int(len(atr)//2.5),5,2*i+1)
+#     plt.scatter(x.T[i],y,s=1)
+#     min_x=min(x.T[i]);max_x=max(x.T[i]);min_y=min(y);max_y=max(y)
+#     plt.xlim(min_x-0.05*abs(max_x-min_x),max_x+0.05*abs(max_x-min_x))
+#     plt.ylim(min_y-0.05*abs(max_y-min_y),max_y+0.05*abs(max_y-min_y))
+#     plt.ylabel(tar[0],fontsize=10);plt.xlabel(atr[i],fontsize=10);plt.title(atr[i],fontsize=10)
+# plt.show()

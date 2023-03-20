@@ -21,16 +21,13 @@ for j in range(10):
     # print(dft.info())
     # print(type(df[df.columns[2]][1]),type(str()))
     for i in df.columns:
-        if type(df[i][1])==type(str()):
+        if df[i].dtypes=='object':
             dft=dft.drop([i],axis=1)
             df=df.drop([i],axis=1)
-    ddel=['Alley','PoolQC','Fence','MiscFeature','FireplaceQu']
-    for i in ddel:
-        dft=dft.drop([i],axis=1)
-        df=df.drop([i],axis=1)
     # print(df.info())
     # print(dft.info())
     # print(dfs.info())
+    
     df=df.dropna()
     print(df.info())
     # 아무튼 정제

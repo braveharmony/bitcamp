@@ -19,14 +19,14 @@ tf.random.set_seed(seed)
 # 1. data prepare
 (x_train,y_train),(x_test,y_test)=fashion_mnist.load_data()
 
-x_train=np.reshape(x_train,(x_train.shape[0],x_train.shape[1],x_train.shape[2],1))
-x_test=np.reshape(x_test,(x_test.shape[0],x_test.shape[1],x_test.shape[2],1))
+x_train=np.reshape(x_train,(x_train.shape[0],x_train.shape[1],x_train.shape[2],1))/255.
+x_test=np.reshape(x_test,(x_test.shape[0],x_test.shape[1],x_test.shape[2],1))/255.
 
 # print(x_train.shape,y_train.shape)
 # print(np.min(x_train),np.max(x_train))
 print(np.unique(y_test,return_counts=True))
-y_train=np.array(pd.get_dummies(y_train,prefix='number'))/255.
-y_test=np.array(pd.get_dummies(y_test,prefix='number'))/255.
+y_train=np.array(pd.get_dummies(y_train,prefix='number'))
+y_test=np.array(pd.get_dummies(y_test,prefix='number'))
 
 
 # 2. model building

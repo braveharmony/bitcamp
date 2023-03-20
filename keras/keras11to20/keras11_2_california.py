@@ -1,7 +1,5 @@
 
 
-from sklearn.metrics import r2_score
-
 # 0. 시드
 import random
 import numpy as np
@@ -45,6 +43,8 @@ model.compile(loss='mse',optimizer='adam')
 model.fit(x_train,y_train,batch_size=1000,epochs=1000)
 
 # 4. evaluation,predict
+from sklearn.metrics import r2_score
+
 loss=model.evaluate(x_test,y_test)
 print(f'loss : {loss}')
 y_predict=model.predict(x_test)

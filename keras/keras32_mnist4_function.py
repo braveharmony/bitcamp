@@ -58,4 +58,4 @@ acc=accuracy_score(np.argmax(y_test,axis=1),np.argmax(model.predict(x_test),axis
 print(f'accuaracy : {acc}\nruntime : {runtime}')
 date=datetime.datetime.now()
 date = date.strftime('%H%M')
-model.save(f'./_save/keras32/{date}.h5')
+# model.save(f'./_save/keras32/{date}.h5')                

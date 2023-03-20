@@ -28,35 +28,38 @@ y_test=np.array(pd.get_dummies(y_test.T[0],prefix='number'))
 
 # 2. model build
 model=Sequential()
-model.add(Conv2D(filters=128
+model.add(Conv2D(filters=256
                  ,kernel_size=(3,3)
                  ,padding='same'
                  ,activation=LeakyReLU(0.5)
                  ,input_shape=(x_train.shape[1],x_train.shape[2],x_train.shape[3],)))
-# model.add(Conv2D(filters=128
-#                  ,kernel_size=(2,2)
-#                  ,padding='same'
-#                  ,activation=LeakyReLU(0.5)))
-model.add(MaxPool2D(pool_size=(2,2)))
+model.add(Conv2D(filters=256
+                 ,kernel_size=(2,2)
+                 ,strides=2
+                 ,activation=LeakyReLU(0.5)))
 model.add(Conv2D(filters=256
                  ,kernel_size=(3,3)
                  ,padding='same'
-                 ,activation=LeakyReLU(0.5)))
-# model.add(Conv2D(filters=256
-#                  ,kernel_size=(3,3)
-#                  ,padding='same'
-#                  ,activation=LeakyReLU(0.5)))
+                 ,activation=LeakyReLU(0.5)
+                 ,input_shape=(x_train.shape[1],x_train.shape[2],x_train.shape[3],)))
 model.add(MaxPool2D(pool_size=(2,2)))
 model.add(Conv2D(filters=512
-                 ,kernel_size=(2,2)
+                 ,kernel_size=(3,3)
                  ,padding='same'
                  ,activation=LeakyReLU(0.5)))
-model.add(MaxPool2D(pool_size=(2,2)))
-model.add(Conv2D(filters=1024
+model.add(Conv2D(filters=512
                  ,kernel_size=(2,2)
-                 ,padding='same'
+                 ,strides=2
                  ,activation=LeakyReLU(0.5)))
 model.add(MaxPool2D(pool_size=(2,2)))
+model.add(Conv2D(filters=512
+                 ,kernel_size=(3,3)
+                 ,padding='same'
+                 ,activation=LeakyReLU(0.5)))
+model.add(Conv2D(filters=512
+                 ,kernel_size=(2,2)
+                 ,strides=2
+                 ,activation=LeakyReLU(0.5)))
 model.add(Flatten())
 model.add(Dense(units=512,activation=LeakyReLU(0.5)))
 model.add(Dropout(0.1))
@@ -80,5 +83,5 @@ model.fit(x_train,y_train,epochs=1000
 # 4. predict,evaluate
 date=datetime.datetime.now().strftime('%H시%M분')
 acc=model.evaluate(x_test,y_test)[1]
-model.save(f'./_save/keras34/acc_{acc}_time_{acc}.h5')
+# model.save(f'./_save/keras34/acc_{acc}_time_{acc}.h5')
 print(f"accuaracy : {acc}")

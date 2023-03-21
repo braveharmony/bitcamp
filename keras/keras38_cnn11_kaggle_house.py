@@ -7,7 +7,7 @@ from tensorflow.python.keras.layers import Input,Dense,LeakyReLU,Dropout,Conv2D,
 from tensorflow.keras.callbacks import EarlyStopping
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
-
+from sklearn.preprocessing import LabelEncoder
 # 0. seed initialization
 seed=0
 random.seed(seed)
@@ -21,10 +21,11 @@ dfs=pd.read_csv(path+'sample_submission.csv')
 # print(df.info())
 # print(dft.info())
 # print(type(df[df.columns[2]][1]),type(str()))
-for i in df.columns:
-    if df[i].dtypes=='object':
-        dft=dft.drop([i],axis=1)
-        df=df.drop([i],axis=1)
+le=LabelEncoder()
+for i in dft.columns:
+    if dft[i].dtypes=='object':
+        dft[i]=le.fit_transform(dft[i])
+        df[i]=le.fit_transform(df[i])
 # print(df.info())
 # print(dft.info())
 # print(dfs.info())
@@ -34,16 +35,16 @@ print(df.info())
 # 아무튼 정제
 x=df.drop([dfs.columns[-1]],axis=1)
 y=df[dfs.columns[-1]]
-# print(x.shape,y.shape)
-# print(np.unique(y))
-# print(dfs.shape,dft.shape)
+print(x.shape,y.shape)
+print(np.unique(y))
+print(dfs.shape,dft.shape)
 x_train,x_test,y_train,y_test=train_test_split(x,y,train_size=0.8,random_state=seed,shuffle=True)
 scaler=MinMaxScaler()
 x_train=scaler.fit_transform(x_train)
 x_test=scaler.transform(x_test)
 print(x_train.shape,x_test.shape)
-x_train=np.reshape(x_train,(x_train.shape[0],x_train.shape[1]//6,6,1))
-x_test=np.reshape(x_test,(x_test.shape[0],x_test.shape[1]//6,6,1))
+x_train=np.reshape(x_train,(x_train.shape[0],x_train.shape[1],1,1))
+x_test=np.reshape(x_test,(x_test.shape[0],x_test.shape[1],1,1))
 print(x_train.shape,x_test.shape)
 
 
@@ -52,15 +53,23 @@ print(x_train.shape,x_test.shape)
 model=Sequential()
 model.add(Conv2D(input_shape=(x_train.shape[1],x_train.shape[2],x_train.shape[3])
                  ,filters=64
-                 ,kernel_size=(3,3)
+                 ,kernel_size=(3,1)
                  ,padding='valid'
                  ,activation='relu'))
 model.add(Conv2D(filters=64
-                 ,kernel_size=(2,2)
+                 ,kernel_size=(2,1)
                  ,strides=2
                  ,activation='relu'))
 model.add(Conv2D(filters=64
-                 ,kernel_size=(2,2)
+                 ,kernel_size=(2,1)
+                 ,padding='valid'
+                 ,activation='relu'))
+model.add(Conv2D(filters=64
+                 ,kernel_size=(2,1)
+                 ,padding='valid'
+                 ,activation='relu'))
+model.add(Conv2D(filters=64
+                 ,kernel_size=(2,1)
                  ,padding='valid'
                  ,activation='relu'))
 model.add(Flatten())

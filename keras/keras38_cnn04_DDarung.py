@@ -66,6 +66,7 @@ hist = model.fit(x_train,y_train,epochs=10
         ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=50,verbose=True,restore_best_weights=True))
 
 # 4. predict,evaluate
+from sklearn.metrics import r2_score
 def RMSE(y_test,y_predict):
     return np.sqrt(mean_squared_error(y_test,y_predict))
 print(f"RMSE : {RMSE(y_test,model.predict(x_test))}\n결정계수 : {r2_score(y_test,model.predict(x_test))}")

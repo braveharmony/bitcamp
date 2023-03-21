@@ -17,10 +17,12 @@ tf.random.set_seed(seed)
 
 # 1.data prepare
 datasets = np.array([i for i in range(1,11)])
-x = np.array([[i,i+1,i+2] for i in range(1,8)])
-y = np.array([i+3 for i in range(1,8)])
+k=3
+x = np.array([[datasets[i+j] for j in range(k)] for i in range(10-k)])
+y = np.array([datasets[i+k] for i in range(10-k)])
 print(x.shape,y.shape)
 x=np.reshape(x,list(x.shape)+[1])
+
 
 # 2. model build
 model=Sequential()

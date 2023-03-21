@@ -17,8 +17,9 @@ tf.random.set_seed(seed)
 
 # 1.data prepare
 datasets = np.array([i for i in range(1,11)])
-x = np.array([[i+j for j in range(4)] for i in range(1,7)])
-y = np.array([i+4 for i in range(1,7)])
+k=4
+x = np.array([[datasets[i+j] for j in range(k)] for i in range(10-k)])
+y = np.array([datasets[i+k] for i in range(10-k)])
 print(x.shape,y.shape)
 x=np.reshape(x,list(x.shape)+[1])
 
@@ -30,7 +31,7 @@ model.add(Dense(1))
 
 # 3. compile, training
 model.compile(loss='mse',optimizer='adam')
-model.fit(x,y,epochs=2000)
+model.fit(x,y,epochs=10000)
 
 # 4. predict,evaluate
 loss= model.evaluate(x,y)

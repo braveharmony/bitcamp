@@ -40,24 +40,8 @@ model.add(Dense(1))
 
 # 3. compile,training
 model.compile(loss='mse',optimizer='adam')
-model.fit(x_train,y_train,batch_size=100,epochs=1,verbose=-1)
-print('===============================================verbose=-1\n')
-model.fit(x_train,y_train,batch_size=100,epochs=1,verbose=-0.1)
-print('===============================================verbose=-0.1\n')
-model.fit(x_train,y_train,batch_size=100,epochs=1,verbose=0)
-print('===============================================verbose=0\n')
-model.fit(x_train,y_train,batch_size=100,epochs=1,verbose=0.5)
-print('===============================================verbose=0.5\n')
-model.fit(x_train,y_train,batch_size=100,epochs=1,verbose=1)
-print('===============================================verbose=1\n')
-model.fit(x_train,y_train,batch_size=100,epochs=1,verbose=2)
-print('===============================================verbose=2\n')
-model.fit(x_train,y_train,batch_size=100,epochs=1,verbose=3)
-print('===============================================verbose=3\n')
-model.fit(x_train,y_train,batch_size=100,epochs=1,verbose=True)
-print('===============================================verbose=True\n')
-model.fit(x_train,y_train,batch_size=100,epochs=1,verbose=False)
-print('===============================================verbose=False\n')
+model.fit(x_train,y_train,batch_size=100,epochs=1000,verbose=True)
+
 
 # 4. evaluation,predict
 from sklearn.metrics import r2_score

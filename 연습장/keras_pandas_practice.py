@@ -1,6 +1,3 @@
-
-
-
 # 1. data prepare
 import numpy as np
 import pandas as pd
@@ -15,6 +12,7 @@ df=pd.read_csv('./_data/kaggle_bike/train.csv',index_col=0)
 print(df)
 print(df.isnull().sum())
 print(df.info())
+df=df.dropna()
 
 x=df.drop(df.columns[-1],axis=1)
 y=df[df.columns[-1]]

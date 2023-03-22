@@ -7,7 +7,7 @@ from tensorflow.python.keras.models import Sequential
 
 
 dataset = range(1,11)
-timesteps = 5
+timesteps = 3
 
 def split_x(dataset,timesteps):
     forlistgen=(dataset[i : i+timesteps] for i in range(len(dataset)- timesteps + 1))#제너레이터 메소드
@@ -15,4 +15,5 @@ def split_x(dataset,timesteps):
     return np.array([dataset[i : i+timesteps] for i in range(len(dataset)- timesteps + 1)])#리스트 컴프리헨션
 
 x=split_x(dataset,timesteps)
+print(x)
 print(x.shape)

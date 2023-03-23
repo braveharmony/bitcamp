@@ -15,7 +15,7 @@ plt.scatter(x,y_hat)
 plt.title('sigmoid')
 
 def binary_cross_entropy(y, y_hat):
-    epsilon = 1e-7  # 0으로 나누는 오류 방지
+    epsilon = 1e-7
     bce =  -y * np.log(y_hat + epsilon) - (1 - y) * np.log(1 - y_hat + epsilon)
     return bce
 bcd=binary_cross_entropy(y,y_hat)

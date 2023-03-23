@@ -16,8 +16,12 @@ tf.random.set_seed(seed)
 
 # 1. data prepare
 (x_train,y_train),(x_test,y_test)=cifar10.load_data()
-y_train=np.array(pd.get_dummies(y_train,prefix='number'))
-y_test=np.array(pd.get_dummies(y_test,prefix='number'))
+def reshape(x):
+    return np.reshape(x,list(x.shape[:2])+[x.shape[2]*x.shape[3]])
+x_train=reshape(x_train)
+x_test=reshape(x_test)
+y_train=np.array(pd.get_dummies(y_train[:,0],prefix='number'))
+y_test=np.array(pd.get_dummies(y_test[:,0],prefix='number'))
 
 # 2. model build
 model=Sequential(SimpleRNN(16,activation='linear',input_shape=x_train.shape[1:]))

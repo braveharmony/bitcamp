@@ -68,4 +68,4 @@ y_predict=model.predict(dft)
 dfs[df.columns[-1]]=y_predict
 now=datetime.datetime.now().strftime('%H시%M분')
 print(now)
-dfs.to_csv(f'./_save/DDarung/03_23/{now}_forsubwithConv.csv')
+dfs.to_csv(f'./_save/DDarung/03_23/{now}_forsubwithConv.csv',index=False)

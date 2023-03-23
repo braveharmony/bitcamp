@@ -16,12 +16,12 @@ np.random.seed(seed)
 tf.random.set_seed(seed)
 
 # 1. data prepare
-df = pd.read_csv('./_data/DDarung/train.csv',index_col=0)
-dft = pd.read_csv('./_data/DDarung/test.csv',index_col=0)
-dfs = pd.read_csv('./_data/DDarung/submission.csv')
+df = pd.read_csv('./_data/kaggle_bike/train.csv',index_col=0)
+dft = pd.read_csv('./_data/kaggle_bike/test.csv',index_col=0)
+dfs = pd.read_csv('./_data/kaggle_bike/sampleSubmission.csv')
 
 df=df.dropna()
-x=df.drop(df.columns[-1],axis=1)
+x=df.drop(df.columns[-3:],axis=1)
 y=df[df.columns[-1]]
 print(x.columns)
 print(dft.columns)
@@ -57,7 +57,7 @@ model.compile(loss='mse',optimizer='adam')
 model.fit(x_train,y_train,epochs=1000,
           batch_size=len(x_train),verbose=True
           ,validation_split=0.2
-          ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=5,verbose=True,restore_best_weights=True))
+          ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=50,verbose=True,restore_best_weights=True))
 
 # 3. predict,evaluate
 print(f'결정 계수 : {r2_score(y_test,model.predict(x_test))}')
@@ -67,4 +67,4 @@ y_predict=model.predict(dft)
 dfs[df.columns[-1]]=y_predict
 now=datetime.datetime.now().strftime('%H시%M분')
 print(now)
-dfs.to_csv(f'./_save/kaggle_bike/03_23/{now}_forsubwithConv.csv')
+dfs.to_csv(f'./_save/kaggle_bike/03_23/{now}_forsubwithConv.csv',index=False)

@@ -64,4 +64,4 @@ y_predict=np.round(model.predict(dft))
 dfs[df.columns[-1]]=y_predict
 import datetime
 now=datetime.datetime.now().strftime('%H시%M분')
-dfs.to_csv(f'./_save/dacon_diabete/03_23/{now}_forsubConv.csv')
+dfs.to_csv(f'./_save/dacon_diabete/03_23/{now}_forsubConv.csv',index=False)

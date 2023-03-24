@@ -28,12 +28,12 @@ x=df.drop(df.columns[3],axis=1)
 y=df[df.columns[3]]
 ts=10
 
-x_train,x_test,y_train,y_test=train_test_split(x,y,train_size=0.7,shuffle=False)
-x_test,x_predict,y_test,y_predict=train_test_split(x_test,y_test,train_size=2/3,shuffle=False)
+x_train,x_test,_,_=train_test_split(x,y,train_size=0.7,shuffle=False)
+# x_test,x_predict,y_test,y_predict=train_test_split(x_test,y_test,train_size=2/3,shuffle=False)
 
-print(x_train.shape,y_train.shape)
-print(x_test.shape,y_test.shape)
-print(x_predict.shape,y_predict.shape)
+# print(x_train.shape,y_train.shape)
+# print(x_test.shape,y_test.shape)
+# print(x_predict.shape,y_predict.shape)
 
 def time_splitx(x,ts,scaler):
     x=scaler.transform(x)
@@ -46,14 +46,18 @@ def time_splity(y,ts):
 
 scaler=RobustScaler()
 scaler.fit(x_train)
+x=time_splitx(x,ts,scaler)
+y=time_splity(y,ts)
+x_train,x_test,y_train,y_test=train_test_split(x,y,train_size=0.7,shuffle=False)
+x_test,x_predict,y_test,y_predict=train_test_split(x_test,y_test,train_size=2/3,shuffle=False)
 
-x_train=time_splitx(x_train,ts,scaler)
-x_test=time_splitx(x_test,ts,scaler)
-x_predict=time_splitx(x_predict,ts,scaler)
+# x_train=time_splitx(x_train,ts,scaler)
+# x_test=time_splitx(x_test,ts,scaler)
+# x_predict=time_splitx(x_predict,ts,scaler)
 
-y_train=time_splity(y_train,ts)
-y_test=time_splity(y_test,ts)
-y_predict=time_splity(y_predict,ts)
+# y_train=time_splity(y_train,ts)
+# y_test=time_splity(y_test,ts)
+# y_predict=time_splity(y_predict,ts)
 
 print(x_train.shape,y_train.shape)
 print(x_test.shape,y_test.shape)
@@ -61,11 +65,13 @@ print(x_predict.shape,y_predict.shape)
 
 # 2. model build
 model=Sequential()
-model.add(LSTM(20,input_shape=(x_train.shape[1:])))
+model.add(LSTM(10,input_shape=(x_train.shape[1:])))
 # model.add(Conv1D(20,4,input_shape=(x_train.shape[1:]),activation=LeakyReLU(0.5)))
 # model.add(Conv1D(20,4,activation=LeakyReLU(0.5)))
 # model.add(Conv1D(20,4,activation=LeakyReLU(0.5)))
 # model.add(Flatten())
+model.add(Dense(64,activation=LeakyReLU(0.5)))
+model.add(Dropout(1/16))
 model.add(Dense(64,activation=LeakyReLU(0.5)))
 model.add(Dropout(1/16))
 model.add(Dense(64,activation=LeakyReLU(0.5)))

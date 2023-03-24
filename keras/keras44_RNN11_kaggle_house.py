@@ -87,4 +87,4 @@ y_predict=model.predict(dft)
 dfs[df.columns[-1]]=y_predict
 now=datetime.datetime.now().strftime('%H시%M분')
 dfs.to_csv('')
-dfs.to_csv(f'./_save/kaggle_house/03_23/{now}_forsub.csv')
+dfs.to_csv(f'./_save/kaggle_house/03_23/{now}_forsub.csv',index=False)

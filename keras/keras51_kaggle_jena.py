@@ -29,11 +29,7 @@ y=df[df.columns[3]]
 ts=10
 
 x_train,x_test,_,_=train_test_split(x,y,train_size=0.7,shuffle=False)
-# x_test,x_predict,y_test,y_predict=train_test_split(x_test,y_test,train_size=2/3,shuffle=False)
 
-# print(x_train.shape,y_train.shape)
-# print(x_test.shape,y_test.shape)
-# print(x_predict.shape,y_predict.shape)
 
 def time_splitx(x,ts,scaler):
     x=scaler.transform(x)
@@ -47,17 +43,10 @@ def time_splity(y,ts):
 scaler=RobustScaler()
 scaler.fit(x_train)
 x=time_splitx(x,ts,scaler)
-y=time_splity(y,ts)
+# y=time_splity(y,ts)
+y=y[ts:]
 x_train,x_test,y_train,y_test=train_test_split(x,y,train_size=0.7,shuffle=False)
 x_test,x_predict,y_test,y_predict=train_test_split(x_test,y_test,train_size=2/3,shuffle=False)
-
-# x_train=time_splitx(x_train,ts,scaler)
-# x_test=time_splitx(x_test,ts,scaler)
-# x_predict=time_splitx(x_predict,ts,scaler)
-
-# y_train=time_splity(y_train,ts)
-# y_test=time_splity(y_test,ts)
-# y_predict=time_splity(y_predict,ts)
 
 print(x_train.shape,y_train.shape)
 print(x_test.shape,y_test.shape)
@@ -88,7 +77,7 @@ model.compile(loss='mse',optimizer='adam')
 model.fit(x_train,y_train
           ,epochs=1000,batch_size=len(x_train)//500
           ,validation_split=0.1,verbose=True
-          ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=5
+          ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=10
                                    ,restore_best_weights=True,verbose=True))
 
 # 4. predict,evaluate
@@ -99,3 +88,5 @@ print(f'RMSE : {RMSE(y_test,model.predict(x_test))}')
 
 # RMSE : 0.22032062656758175
 # RMSE : 0.2017210034814546
+# RMSE : 0.2194808638938798
+# RMSE : 0.19186912067854572

@@ -49,15 +49,13 @@ from tensorflow.python.keras.layers import Dense,Conv1D,LSTM,Dropout,Flatten
 model=Sequential()
 model.add(LSTM(16,input_shape=(10, 13)))
 model.add(Dense(128,activation='relu'))
-model.add(Dropout(1/16))
+# model.add(Dropout(1/16))
 model.add(Dense(32,activation='relu'))
-model.add(Dropout(1/16))
+# model.add(Dropout(1/16))
 model.add(Dense(64,activation='relu'))
-model.add(Dropout(1/16))
+# model.add(Dropout(1/16))
 model.add(Dense(32,activation='relu'))
-model.add(Dropout(1/16))
-model.add(Dense(64,activation='relu'))
-model.add(Dropout(1/16))
+# model.add(Dropout(1/16))
 model.add(Dense(1,activation='linear'))
 model.summary()
 
@@ -69,7 +67,7 @@ start_time=time.time()
 model.fit(x_train,y_train
           ,epochs=100,batch_size=len(x_train)//300
           ,validation_data=(x_test,y_test),verbose=True
-          ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=3,verbose=True,restore_best_weights=False))
+          ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=5,verbose=True,restore_best_weights=False))
 
 # 4. predict,evaluate
 from sklearn.metrics import r2_score

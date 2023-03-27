@@ -60,13 +60,9 @@ model.add(LSTM(10,input_shape=(x_train.shape[1:])))
 # model.add(Conv1D(20,4,activation=LeakyReLU(0.5)))
 # model.add(Flatten())
 model.add(Dense(64,activation=LeakyReLU(0.5)))
-model.add(Dropout(1/16))
+# model.add(Dropout(1/16))
 model.add(Dense(64,activation=LeakyReLU(0.5)))
-model.add(Dropout(1/16))
-model.add(Dense(64,activation=LeakyReLU(0.5)))
-model.add(Dropout(1/16))
-model.add(Dense(64,activation=LeakyReLU(0.5)))
-model.add(Dropout(1/16))
+# model.add(Dropout(1/16))
 model.add(Dense(64,activation=LeakyReLU(0.5)))
 model.add(Dense(1))
 model.summary()
@@ -85,8 +81,3 @@ from sklearn.metrics import mean_squared_error
 def RMSE(y_test,y_predict):
     return np.sqrt(mean_squared_error(y_test,y_predict))
 print(f'RMSE : {RMSE(y_test,model.predict(x_test))}')
-
-# RMSE : 0.22032062656758175
-# RMSE : 0.2017210034814546
-# RMSE : 0.2194808638938798
-# RMSE : 0.19186912067854572

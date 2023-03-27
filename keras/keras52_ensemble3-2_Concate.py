@@ -41,7 +41,7 @@ x3_test=scaler.transform(x3_test)
 
 # 2. model1 build
 from tensorflow.python.keras.models import Sequential,Model
-from tensorflow.python.keras.layers import Dense,Input,Concatenate
+from tensorflow.python.keras.layers import Dense,Input
 # 2-1 input1
 input1=Input(shape=(x1.shape[1]))
 layer1=Dense(64,activation='linear')(input1)
@@ -61,7 +61,7 @@ layer3=Dense(64,activation='linear')(input3)
 layer3=Dense(64,activation='linear')(layer3)
 layer3=Dense(64,activation='linear')(layer3)
 layer3=Dense(64,activation='linear')(layer3)
-from tensorflow.python.keras.layers import concatenate,Concatenate
+from tensorflow.python.keras.layers import Concatenate
 # 2-3 concatenate
 
 merge1=Concatenate()((layer1,layer2,layer3))
@@ -123,3 +123,11 @@ print('======================model2======================')
 
 y_pred2=np.array(model2.predict(np.concatenate((x1_test,x2_test,x3_test),axis=1))).T
 print(f'runtime : {runtime2}\n결정계수 : {r2(y_test,y_pred2)}\nRMSE : {RMSE(y_test,y_pred2)}\n')
+
+"""
+    def concatenate(inputs, axis=-1, **kwargs):
+    return Concatenate(axis=axis, **kwargs)(inputs)<---소스 정의가 이렇게 되어 있음
+    Concatenate객체를 constructor를 통해서 생성하고 이후 Concatenate의 super class인 layers class의 __call__ method를 호출한다.
+    이후 __call__method를 통해서 Concatenate가 출력 텐서를 만든다
+    이후 Concatenate내부의 _output_tensor_cache라는 attribute값을 갱신하고 Concatenate객체는 이attribute를 통해서 output layer를 출력한다.
+"""

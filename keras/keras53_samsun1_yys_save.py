@@ -16,7 +16,7 @@ import pandas as pd
 import random
 import numpy as np
 from tensorflow.python.keras.models import Sequential,Model
-from tensorflow.python.keras.layers import LSTM
+from tensorflow.python.keras.layers import LSTM,Dense
 import matplotlib.pyplot as plt
 
 # 0. seed initialization
@@ -37,8 +37,8 @@ for col in samsung.columns:
 for col in hyundai.columns:
     if hyundai[col].dtype == 'object':
         hyundai[col] = pd.to_numeric(hyundai[col].str.replace(',', ''), errors='coerce')
-samsung=samsung.iloc[:180][::-1]
-hyundai=hyundai.iloc[:180][::-1]
+samsung=samsung.iloc[:200][::-1]
+hyundai=hyundai.iloc[:200][::-1]
 
 # '시가', '고가', '저가', '종가', 'Unnamed: 6', '등락률', '거래량', '금액(백만)', '신용비', '개인', '기관', '외인(수량)', '외국계', '프로그램', '외인비'
 col_drop=[7,8,14]
@@ -78,5 +78,33 @@ print(hyundai.info())
 x=np.concatenate((np.array(samsung),np.array(hyundai)),axis=1)
 y=samsung[samsung.columns[0]]
 print(x.shape)
-plt.plot(range(len(y)),y)
-plt.show()
+# plt.plot(range(len(y)),y)
+# plt.show()
+
+def split_to_time(data,ts):
+    gen = (data[i:i+ts]for i in range(len(data)-ts+1))
+    return np.array(list(gen))
+ts=20
+x=split_to_time(x,ts)
+x_train=x[:-1]
+x_test=np.reshape(x[-1],[1]+list(x_train.shape[1:]))
+print(x_train.shape)
+y_train=y[ts:]
+
+# 2. model build
+model=Sequential()
+model.add(LSTM(32,input_shape=x_train.shape[1:]))
+model.add(Dense(16,activation='linear'))
+model.add(Dense(16,activation='linear'))
+model.add(Dense(16,activation='linear'))
+model.add(Dense(16,activation='linear'))
+model.add(Dense(1))
+
+# 3. compile, training
+model.compile(loss='mse',optimizer='adam')
+model.fit(x_train,y_train
+          ,epochs=10,batch_size=len(x_train)//50
+          ,verbose=True)
+
+# 4. predict
+print(model.predict(x_test))

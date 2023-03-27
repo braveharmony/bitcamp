@@ -17,7 +17,7 @@ tf.random.set_seed(seed)
 # 1. data prepare
 df=pd.read_csv('./_data/kaggle_bike/train.csv',index_col=0)
 # print(df) # 1시간 간격
-x=df.drop([df.columns[-1],df.columns[-2],df.columns[-3]],axis=1)
+x=df.drop(df.columns[-1],axis=1)
 y=df[[df.columns[-1]]]
 x_train,_,_,_=train_test_split(x,y,train_size=0.8,shuffle=False)
 
@@ -34,12 +34,14 @@ ts=24
 x=split_to_timesteps(x,ts)
 y=y[ts:]
 
-x_train,x_test,y_train,y_test = train_test_split(x,y,train_size=0.8,shuffle=False)
+x_train,x_test,y_train,y_test = train_test_split(x,y,train_size=0.8,shuffle=True)
 print(x_train.shape)
 # 2. model build
 model=Sequential()
-model.add(LSTM(32,input_shape=x_train.shape[1:],activation='relu'))
-model.add(Dense(16,activation='relu'))
+model.add(LSTM(32,input_shape=x_train.shape[1:],activation='tanh'))
+model.add(Dense(16,activation='relu'
+                # ,input_shape=x_train.shape[1:]
+                ))
 model.add(Dense(16,activation='relu'))
 model.add(Dense(16,activation='relu'))
 model.add(Dense(16,activation='relu'))
@@ -50,10 +52,10 @@ import time
 model.compile(loss='mse',optimizer='adam')
 start=time.time()
 model.fit(x_train,y_train
-          ,epochs=100,batch_size=len(x_train)//100
-          ,validation_split=0.2,verbose=True,shuffle=False
+          ,epochs=10000,batch_size=len(x_train)//100
+          ,validation_split=0.2,verbose=True,shuffle=True
           ,callbacks=EarlyStopping(monitor='val_loss',mode='min'
-                                   ,patience=5,verbose=True,restore_best_weights=True))
+                                   ,patience=20,verbose=True,restore_best_weights=True))
 
 # 4. predict,evaluate
 from sklearn.metrics import r2_score

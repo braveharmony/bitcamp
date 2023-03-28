@@ -15,8 +15,8 @@ import tensorflow as tf
 import pandas as pd
 import random
 import numpy as np
-from tensorflow.python.keras.models import Sequential,Model
-from tensorflow.python.keras.layers import LSTM,Dense,Input,Concatenate
+from tensorflow.keras.models import Sequential,Model
+from tensorflow.keras.layers import LSTM,Dense,Reshape,Input,Concatenate,SimpleRNN,Conv1D,Flatten
 import matplotlib.pyplot as plt
 
 # 0. seed initialization
@@ -75,6 +75,7 @@ print(hyundai.info())
 
 # plt.show()
 
+
 solve=3
 
 x1=np.array(samsung)
@@ -83,7 +84,7 @@ y=samsung[samsung.columns[solve]]
 print(x1.shape,x2.shape)
 # plt.plot(range(len(y)),y)
 # plt.show()
-ts=20
+ts=22
 
 def split_and_scaling(x,ts):
     from sklearn.preprocessing import MinMaxScaler
@@ -102,15 +103,20 @@ x2_train,x2_test=split_and_scaling(x2,ts)
 
 y_train=y[ts:]
 
+
 # 2. model build
 input1=Input(shape=(x1_train.shape[1:]))
 input2=Input(shape=(x2_train.shape[1:]))
 merge=Concatenate()((input1,input2))
-layer=LSTM(32)(merge)
+layer=Conv1D(32,6)(merge)
+layer=Conv1D(32,6)(layer)
+layer=Conv1D(32,2)(layer)
+layer=Conv1D(32,2)(layer)
+layer=Flatten()(layer)
 layer=Dense(16,activation='linear')(layer)
+layer=Dense(32,activation='linear')(layer)
 layer=Dense(16,activation='linear')(layer)
-layer=Dense(16,activation='linear')(layer)
-layer=Dense(16,activation='linear')(layer)
+layer=Dense(32,activation='linear')(layer)
 layer=Dense(16,activation='linear')(layer)
 output=Dense(1)(layer)
 model=Model(inputs=(input1,input2),outputs=output)
@@ -118,7 +124,7 @@ model.summary()
 
 
 # 3. compile, training
-from tensorflow.python.keras.callbacks import EarlyStopping 
+from tensorflow.keras.callbacks import EarlyStopping 
 import time
 model.compile(loss='mse',optimizer='adam')
 start_time=time.time()
@@ -135,6 +141,8 @@ evl+=f'결정계수 : {r2_score(y_val,y_pred)}\n'
 evl+=f'런타임 : {round(time.time()-start_time,2)} 초\n'
 
 print(evl)
+x1_val,x2_val,y_val=x1_train,x2_train,y_train
+y_pred=model.predict([x1_val,x2_val],batch_size=200,verbose=True)
 plt.plot(range(len(y_val)),y_val,label='real')
 plt.plot(range(len(y_val)),y_pred,label='model')
 plt.legend()

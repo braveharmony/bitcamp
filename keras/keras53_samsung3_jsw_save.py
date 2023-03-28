@@ -142,7 +142,7 @@ evl+=f'런타임 : {round(time.time()-start_time,2)} 초\n'
 print(evl)
 
 
-x1_val,x2_val,y_val=x1_train[2*len(y_train)//5:],x2_train[2*len(y_train)//5:],y_train[2*len(y_train)//5:]
+x1_val,x2_val,y_val=x1_train,x2_train,y_train
 y_pred=model.predict([x1_val,x2_val],batch_size=200,verbose=True)
 plt.plot(range(len(y_val)),y_val,label='real')
 plt.plot(range(len(y_val)),y_pred,label='model')

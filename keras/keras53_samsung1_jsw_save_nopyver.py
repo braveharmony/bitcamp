@@ -16,11 +16,11 @@ import pandas as pd
 import random
 import numpy as np
 from tensorflow.keras.models import Sequential,Model
-from tensorflow.keras.layers import LSTM,Dense,Input,Concatenate,SimpleRNN
+from tensorflow.keras.layers import LSTM,Dense,Reshape,Input,Concatenate,SimpleRNN
 import matplotlib.pyplot as plt
 
 # 0. seed initialization
-seed=0
+seed=4
 random.seed(seed)
 np.random.seed(seed)
 tf. random.set_seed(seed)
@@ -76,7 +76,7 @@ print(hyundai.info())
 # plt.show()
 
 
-solve=0
+solve=3
 
 x1=np.array(samsung)
 x2=np.array(hyundai)
@@ -84,7 +84,7 @@ y=samsung[samsung.columns[solve]]
 print(x1.shape,x2.shape)
 # plt.plot(range(len(y)),y)
 # plt.show()
-ts=3
+ts=2
 
 def split_and_scaling(x,ts):
     from sklearn.preprocessing import MinMaxScaler
@@ -94,14 +94,14 @@ def split_and_scaling(x,ts):
         gen = (data[i:i+ts]for i in range(len(data)-ts+1))
         return np.array(list(gen))
     x=split_to_time(x,ts)
-    x_train=x[:-2]
+    x_train=x[:-1]
     x_test=np.reshape(x[-1],[1]+list(x_train.shape[1:]))
     print(x_train.shape)
     return x_train,x_test
 x1_train,x1_test=split_and_scaling(x1,ts)
 x2_train,x2_test=split_and_scaling(x2,ts)
 
-y_train=y[ts+1:]
+y_train=y[ts:]
 
 
 # 2. model build
@@ -111,13 +111,9 @@ merge=Concatenate()((input1,input2))
 layer=SimpleRNN(32)(merge)
 layer=Dense(16,activation='linear')(layer)
 layer=Dense(16,activation='linear')(layer)
-layer=Dense(16,activation='linear')(layer)
-layer=Dense(16,activation='linear')(layer)
-layer=Dense(16,activation='linear')(layer)
 output=Dense(1)(layer)
 model=Model(inputs=(input1,input2),outputs=output)
 model.summary()
-
 
 
 # 3. compile, training
@@ -126,14 +122,18 @@ import time
 model.compile(loss='mse',optimizer='adam')
 start_time=time.time()
 x1_val,x2_val,y_val=x1_train[4*len(y_train)//5:],x2_train[4*len(y_train)//5:],y_train[4*len(y_train)//5:]
-model.load_weights('./_save/samsung/keras53_samsung4_jsw.h5')
+model.fit([x1_train,x2_train],y_train
+        ,epochs=1000,batch_size=len(x1_train)//40
+        ,verbose=True,validation_data=([x1_val,x2_val],y_val)
+        ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=25,verbose=True,restore_best_weights=True))
 
 
 # 4. predict
 from sklearn.metrics import r2_score
 evl=str()
 evl+=f'구하는 값 : {samsung.columns[solve]}\n'
-evl+=f'직전값 : {y_train[-1]} 예측값:{round(float(model.predict([x1_test,x2_test],batch_size=200,verbose=True)[0,0]),2)}\n'
+predval=round(float(model.predict([x1_test,x2_test],batch_size=200,verbose=True)[0,0]),2)
+evl+=f'직전값 : {y_train[-1]} 예측값:{predval}\n'
 y_pred=model.predict([x1_val,x2_val],batch_size=200,verbose=True)
 evl+=f'결정계수 : {r2_score(y_val,y_pred)}\n'
 evl+=f'런타임 : {round(time.time()-start_time,2)} 초\n'
@@ -141,7 +141,10 @@ evl+=f'런타임 : {round(time.time()-start_time,2)} 초\n'
 print(evl)
 x1_val,x2_val,y_val=x1_train,x2_train,y_train
 y_pred=model.predict([x1_val,x2_val],batch_size=200,verbose=True)
-plt.plot(range(len(y_val)),y_val,label='real')
-plt.plot(range(len(y_val)),y_pred,label='model')
-plt.legend()
-plt.show()
+# plt.plot(range(len(y_val)),y_val,label='real')
+# plt.plot(range(len(y_val)),y_pred,label='model')
+# plt.legend()
+# plt.show()
+
+# 5. save
+model.save_weights('./_save/samsung/keras53_samsung2_jsw.h5')

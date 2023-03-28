@@ -26,8 +26,8 @@ np.random.seed(seed)
 tf. random.set_seed(seed)
 
 # 1. data prepare
-samsung=pd.read_csv('./_data/시험/삼성전자 주가2.csv', encoding='cp949',index_col=0)
-hyundai=pd.read_csv('./_data/시험/현대자동차.csv', encoding='cp949',index_col=0)
+samsung=pd.read_csv('./_data/시험/삼성전자 주가3.csv', encoding='cp949',index_col=0)
+hyundai=pd.read_csv('./_data/시험/현대자동차2.csv', encoding='cp949',index_col=0)
 samsung=samsung.drop(samsung.columns[4],axis=1)
 hyundai=hyundai.drop(hyundai.columns[4],axis=1)
 
@@ -94,14 +94,14 @@ def split_and_scaling(x,ts):
         gen = (data[i:i+ts]for i in range(len(data)-ts+1))
         return np.array(list(gen))
     x=split_to_time(x,ts)
-    x_train=x[:-2]
+    x_train=x[:-1]
     x_test=np.reshape(x[-1],[1]+list(x_train.shape[1:]))
     print(x_train.shape)
     return x_train,x_test
 x1_train,x1_test=split_and_scaling(x1,ts)
 x2_train,x2_test=split_and_scaling(x2,ts)
 
-y_train=y[ts+1:]
+y_train=y[ts:]
 
 
 # 2. model build
@@ -126,9 +126,9 @@ model.compile(loss='mse',optimizer='adam')
 start_time=time.time()
 x1_val,x2_val,y_val=x1_train[4*len(y_train)//5:],x2_train[4*len(y_train)//5:],y_train[4*len(y_train)//5:]
 model.fit([x1_train,x2_train],y_train
-          ,epochs=500,batch_size=len(x1_train)//40
+          ,epochs=1000,batch_size=len(x1_train)//40
           ,verbose=True,validation_data=([x1_val,x2_val],y_val)
-          ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=10,verbose=True,restore_best_weights=True))
+          ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=100,verbose=True,restore_best_weights=True))
 
 
 # 4. predict

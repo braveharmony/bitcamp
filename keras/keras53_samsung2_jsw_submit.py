@@ -26,8 +26,8 @@ np.random.seed(seed)
 tf. random.set_seed(seed)
 
 # 1. data prepare
-samsung=pd.read_csv('./_data/시험/삼성전자 주가2.csv', encoding='cp949',index_col=0)
-hyundai=pd.read_csv('./_data/시험/현대자동차.csv', encoding='cp949',index_col=0)
+samsung=pd.read_csv('./_data/시험/삼성전자 주가3.csv', encoding='cp949',index_col=0)
+hyundai=pd.read_csv('./_data/시험/현대자동차2.csv', encoding='cp949',index_col=0)
 samsung=samsung.drop(samsung.columns[4],axis=1)
 hyundai=hyundai.drop(hyundai.columns[4],axis=1)
 
@@ -93,14 +93,14 @@ def split_and_scaling(x,ts):
         gen = (data[i:i+ts]for i in range(len(data)-ts+1))
         return np.array(list(gen))
     x=split_to_time(x,ts)
-    x_train=x[:-2]
+    x_train=x[:-1]
     x_test=np.reshape(x[-1],[1]+list(x_train.shape[1:]))
     print(x_train.shape)
     return x_train,x_test
 x1_train,x1_test=split_and_scaling(x1,ts)
 x2_train,x2_test=split_and_scaling(x2,ts)
 
-y_train=y[ts+1:]
+y_train=y[ts:]
 
 # 2. model build
 input1=Input(shape=(x1_train.shape[1:]))

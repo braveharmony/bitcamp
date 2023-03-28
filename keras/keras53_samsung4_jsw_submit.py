@@ -26,8 +26,8 @@ np.random.seed(seed)
 tf. random.set_seed(seed)
 
 # 1. data prepare
-samsung=pd.read_csv('./_data/시험/삼성전자 주가2.csv', encoding='cp949',index_col=0)
-hyundai=pd.read_csv('./_data/시험/현대자동차.csv', encoding='cp949',index_col=0)
+samsung=pd.read_csv('./_data/시험/삼성전자 주가3.csv', encoding='cp949',index_col=0)
+hyundai=pd.read_csv('./_data/시험/현대자동차2.csv', encoding='cp949',index_col=0)
 samsung=samsung.drop(samsung.columns[4],axis=1)
 hyundai=hyundai.drop(hyundai.columns[4],axis=1)
 

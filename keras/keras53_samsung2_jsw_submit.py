@@ -16,7 +16,7 @@ import pandas as pd
 import random
 import numpy as np
 from tensorflow.python.keras.models import Sequential,Model
-from tensorflow.python.keras.layers import LSTM,Dense
+from tensorflow.python.keras.layers import LSTM,Dense,Input,Concatenate
 import matplotlib.pyplot as plt
 
 # 0. seed initialization
@@ -77,36 +77,43 @@ print(hyundai.info())
 
 solve=3
 
-x=np.concatenate((np.array(samsung),np.array(hyundai)),axis=1)
+x1=np.array(samsung)
+x2=np.array(hyundai)
 y=samsung[samsung.columns[solve]]
-print(x.shape)
+print(x1.shape,x2.shape)
 # plt.plot(range(len(y)),y)
 # plt.show()
-
-from sklearn.preprocessing import MinMaxScaler
-scaler=MinMaxScaler()
-x[4:]=scaler.fit_transform(x[4:])
-
-
-def split_to_time(data,ts):
-    gen = (data[i:i+ts]for i in range(len(data)-ts+1))
-    return np.array(list(gen))
 ts=20
-x=split_to_time(x,ts)
-x_train=x[:-1]
-x_test=np.reshape(x[-1],[1]+list(x_train.shape[1:]))
-print(x_train.shape)
-y_train=y[ts:]
+
+def split_and_scaling(x,ts):
+    from sklearn.preprocessing import MinMaxScaler
+    scaler=MinMaxScaler()
+    x[4:]=scaler.fit_transform(x[4:])
+    def split_to_time(data,ts):
+        gen = (data[i:i+ts]for i in range(len(data)-ts+1))
+        return np.array(list(gen))
+    x=split_to_time(x,ts)
+    x_train=x[:-2]
+    x_test=np.reshape(x[-1],[1]+list(x_train.shape[1:]))
+    print(x_train.shape)
+    return x_train,x_test
+x1_train,x1_test=split_and_scaling(x1,ts)
+x2_train,x2_test=split_and_scaling(x2,ts)
+
+y_train=y[ts+1:]
 
 # 2. model build
-model=Sequential()
-model.add(LSTM(32,input_shape=x_train.shape[1:]))
-model.add(Dense(16,activation='linear'))
-model.add(Dense(16,activation='linear'))
-model.add(Dense(16,activation='linear'))
-model.add(Dense(16,activation='linear'))
-model.add(Dense(16,activation='linear'))
-model.add(Dense(1))
+input1=Input(shape=(x1_train.shape[1:]))
+input2=Input(shape=(x2_train.shape[1:]))
+merge=Concatenate()((input1,input2))
+layer=LSTM(32)(merge)
+layer=Dense(16,activation='linear')(layer)
+layer=Dense(16,activation='linear')(layer)
+layer=Dense(16,activation='linear')(layer)
+layer=Dense(16,activation='linear')(layer)
+layer=Dense(16,activation='linear')(layer)
+output=Dense(1)(layer)
+model=Model(inputs=(input1,input2),outputs=output)
 model.summary()
 
 
@@ -115,15 +122,15 @@ from tensorflow.python.keras.callbacks import EarlyStopping
 import time
 model.compile(loss='mse',optimizer='adam')
 start_time=time.time()
-x_val,y_val=x_train[4*len(y_train)//5:],y_train[4*len(y_train)//5:]
+x1_val,x2_val,y_val=x1_train[4*len(y_train)//5:],x2_train[4*len(y_train)//5:],y_train[4*len(y_train)//5:]
 model.load_weights('./_save/samsung/keras53_samsung2_jsw.h5')
 
 # 4. predict
 from sklearn.metrics import r2_score
 evl=str()
 evl+=f'구하는 값 : {samsung.columns[solve]}\n'
-evl+=f'직전값 : {y_train[-1]} 예측값:{round(float(model.predict(x_test,batch_size=200,verbose=True)[0,0]),2)}\n'
-y_pred=model.predict(x_val,batch_size=200,verbose=True)
+evl+=f'직전값 : {y_train[-1]} 예측값:{round(float(model.predict([x1_test,x2_test],batch_size=200,verbose=True)[0,0]),2)}\n'
+y_pred=model.predict([x1_val,x2_val],batch_size=200,verbose=True)
 evl+=f'결정계수 : {r2_score(y_val,y_pred)}\n'
 evl+=f'런타임 : {round(time.time()-start_time,2)} 초\n'
 

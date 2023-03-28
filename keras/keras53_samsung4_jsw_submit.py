@@ -9,8 +9,8 @@
 # 메일 제목 : 장승원 [삼성 1차] 60,350.07원
 # 첨부 파일 : keras53_samsung2_jsw_submit.py
 # 첨부 파일 : keras53_samsung4_jsw_submit.py
-# 가중치    : _save/samsung/keras53_samsung2_jsw.j5
-# 가중치    : _save/samsung/keras53_samsung4_jsw.j5
+# 가중치    : _save/samsung/keras53_samsung2_jsw.h5
+# 가중치    : _save/samsung/keras53_samsung4_jsw.h5
 import tensorflow as tf
 import pandas as pd
 import random
@@ -75,21 +75,28 @@ print(hyundai.info())
 
 # plt.show()
 
+solve=0
+
 x=np.concatenate((np.array(samsung),np.array(hyundai)),axis=1)
-y=samsung[samsung.columns[0]]
+y=samsung[samsung.columns[solve]]
 print(x.shape)
 # plt.plot(range(len(y)),y)
 # plt.show()
+
+from sklearn.preprocessing import MinMaxScaler
+scaler=MinMaxScaler()
+x[4:]=scaler.fit_transform(x[4:])
+
 
 def split_to_time(data,ts):
     gen = (data[i:i+ts]for i in range(len(data)-ts+1))
     return np.array(list(gen))
 ts=20
 x=split_to_time(x,ts)
-x_train=x[:-1]
+x_train=x[:-2]
 x_test=np.reshape(x[-1],[1]+list(x_train.shape[1:]))
 print(x_train.shape)
-y_train=y[ts:]
+y_train=y[ts+1:]
 
 # 2. model build
 model=Sequential()
@@ -98,13 +105,31 @@ model.add(Dense(16,activation='linear'))
 model.add(Dense(16,activation='linear'))
 model.add(Dense(16,activation='linear'))
 model.add(Dense(16,activation='linear'))
+model.add(Dense(16,activation='linear'))
 model.add(Dense(1))
+model.summary()
+
+x_val,y_val=x_train[4*len(y_train)//5:],y_train[4*len(y_train)//5:]
 
 # 3. compile, training
+from tensorflow.python.keras.callbacks import EarlyStopping 
+import time
 model.compile(loss='mse',optimizer='adam')
-model.fit(x_train,y_train
-          ,epochs=10,batch_size=len(x_train)//50
-          ,verbose=True)
+start_time=time.time()
+x_val,y_val=x_train[4*len(y_train)//5:],y_train[4*len(y_train)//5:]
+model.load_weights('./_save/samsung/keras53_samsung4_jsw.h5')
 
 # 4. predict
-print(model.predict(x_test))
+from sklearn.metrics import r2_score
+evl=str()
+evl+=f'구하는 값 : {samsung.columns[solve]}\n'
+evl+=f'직전값 : {y_train[-1]} 예측값:{round(float(model.predict(x_test,batch_size=200,verbose=True)[0,0]),2)}\n'
+y_pred=model.predict(x_val,batch_size=200,verbose=True)
+evl+=f'결정계수 : {r2_score(y_val,y_pred)}\n'
+evl+=f'런타임 : {round(time.time()-start_time,2)} 초\n'
+
+print(evl)
+plt.plot(range(len(y_val)),y_val,label='real')
+plt.plot(range(len(y_val)),y_pred,label='model')
+plt.legend()
+plt.show()

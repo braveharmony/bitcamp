@@ -6,7 +6,7 @@
 
 # 1. 삼성전자 28일(화) 종가 맞추기(점수배점 0.3)
 # 2. 삼성전자 29일(수) 아침 시가 맞추기(점수배점 0.7)
-# 메일 제목 : 장승원 [삼성 1차] 60,350.07원
+# 메일 제목 : 장승원 [현대 2차] 60,350.07원
 # 첨부 파일 : keras53_samsung2_jsw_submit.py
 # 첨부 파일 : keras53_samsung4_jsw_submit.py
 # 가중치    : _save/samsung/keras53_samsung2_jsw.h5
@@ -80,11 +80,11 @@ solve=0
 
 x1=np.array(samsung)
 x2=np.array(hyundai)
-y=samsung[samsung.columns[solve]]
+y=hyundai[hyundai.columns[solve]]
 print(x1.shape,x2.shape)
 # plt.plot(range(len(y)),y)
 # plt.show()
-ts=20
+ts=19
 def split_and_scaling(x,ts):
     from sklearn.preprocessing import MinMaxScaler
     scaler=MinMaxScaler()

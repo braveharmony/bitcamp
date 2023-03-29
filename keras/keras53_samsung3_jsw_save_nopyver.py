@@ -6,7 +6,7 @@
 
 # 1. 삼성전자 28일(화) 종가 맞추기(점수배점 0.3)
 # 2. 삼성전자 29일(수) 아침 시가 맞추기(점수배점 0.7)
-# 메일 제목 : 장승원 [삼성 1차] 60,350.07원
+# 메일 제목 : 장승원 [현대 2차] 60,350.07원
 # 첨부 파일 : keras53_samsung2_jsw_submit.py
 # 첨부 파일 : keras53_samsung4_jsw_submit.py
 # 가중치    : _save/samsung/keras53_samsung2_jsw.h5
@@ -80,12 +80,11 @@ solve=0
 
 x1=np.array(samsung)
 x2=np.array(hyundai)
-y=samsung[samsung.columns[solve]]
+y=hyundai[hyundai.columns[solve]]
 print(x1.shape,x2.shape)
 # plt.plot(range(len(y)),y)
 # plt.show()
-ts=3
-
+ts=30
 def split_and_scaling(x,ts):
     from sklearn.preprocessing import MinMaxScaler
     scaler=MinMaxScaler()
@@ -96,7 +95,6 @@ def split_and_scaling(x,ts):
     x=split_to_time(x,ts)
     x_train=x[:-2]
     x_test=np.reshape(x[-1],[1]+list(x_train.shape[1:]))
-    print(x_train.shape)
     return x_train,x_test
 x1_train,x1_test=split_and_scaling(x1,ts)
 x2_train,x2_test=split_and_scaling(x2,ts)
@@ -129,7 +127,7 @@ x1_val,x2_val,y_val=x1_train[4*len(y_train)//5:],x2_train[4*len(y_train)//5:],y_
 model.fit([x1_train,x2_train],y_train
           ,epochs=500,batch_size=len(x1_train)//40
           ,verbose=True,validation_data=([x1_val,x2_val],y_val)
-          ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=20,verbose=True,restore_best_weights=True))
+          ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=50,verbose=True,restore_best_weights=True))
 
 # 4. predict
 from sklearn.metrics import r2_score

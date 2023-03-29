@@ -6,11 +6,11 @@
 
 # 1. 삼성전자 28일(화) 종가 맞추기(점수배점 0.3)
 # 2. 삼성전자 29일(수) 아침 시가 맞추기(점수배점 0.7)
-# 메일 제목 : 장승원 [삼성 1차] 60,350.07원
+# 메일 제목 : 장승원 [현대 2차] 60,350.07원
 # 첨부 파일 : keras53_samsung2_jsw_submit.py
 # 첨부 파일 : keras53_samsung4_jsw_submit.py
-# 가중치    : _save/samsung/keras53_samsung2_jsw.h5
-# 가중치    : _save/samsung/keras53_samsung4_jsw.h5
+# 가중치    : _save/samsung/keras53_samsung2_jsw.h5 / hdf5
+# 가중치    : _save/samsung/keras53_samsung4_jsw.h5 / hdf5
 import tensorflow as tf
 import pandas as pd
 import random
@@ -80,7 +80,7 @@ solve=0
 
 x1=np.array(samsung)
 x2=np.array(hyundai)
-y=samsung[samsung.columns[solve]]
+y=hyundai[hyundai.columns[solve]]
 print(x1.shape,x2.shape)
 # plt.plot(range(len(y)),y)
 # plt.show()
@@ -137,6 +137,15 @@ evl+=f'직전값 : {y_train[-1]} 예측값:{round(float(model.predict([x1_test,x
 y_pred=model.predict([x1_val,x2_val],batch_size=200,verbose=True)
 evl+=f'결정계수 : {r2_score(y_val,y_pred)}\n'
 evl+=f'런타임 : {round(time.time()-start_time,2)} 초\n'
+
+def standard_deviation(data):
+    n = len(data)
+    mean = np.mean(data)
+    deviations = ((x - mean) ** 2 for x in data)
+    variance = sum(deviations) / (n - 1)
+    standard_deviation = np.sqrt(variance)
+    return standard_deviation
+print(f'표준편차 : {standard_deviation(y)}')
 
 print(evl)
 x1_val,x2_val,y_val=x1_train,x2_train,y_train

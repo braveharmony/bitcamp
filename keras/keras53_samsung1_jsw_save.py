@@ -16,11 +16,11 @@ import pandas as pd
 import random
 import numpy as np
 from tensorflow.keras.models import Sequential,Model
-from tensorflow.keras.layers import LSTM,Dense,Reshape,Input,Concatenate,SimpleRNN,Conv1D,Flatten
+from tensorflow.keras.layers import LSTM,Dense,Reshape,Input,Concatenate,SimpleRNN
 import matplotlib.pyplot as plt
 
 # 0. seed initialization
-seed=0
+seed=4
 random.seed(seed)
 np.random.seed(seed)
 tf. random.set_seed(seed)
@@ -84,7 +84,7 @@ y=samsung[samsung.columns[solve]]
 print(x1.shape,x2.shape)
 # plt.plot(range(len(y)),y)
 # plt.show()
-ts=22
+ts=2
 
 def split_and_scaling(x,ts):
     from sklearn.preprocessing import MinMaxScaler
@@ -108,15 +108,8 @@ y_train=y[ts:]
 input1=Input(shape=(x1_train.shape[1:]))
 input2=Input(shape=(x2_train.shape[1:]))
 merge=Concatenate()((input1,input2))
-layer=Conv1D(32,6)(merge)
-layer=Conv1D(32,6)(layer)
-layer=Conv1D(32,2)(layer)
-layer=Conv1D(32,2)(layer)
-layer=Flatten()(layer)
+layer=SimpleRNN(32)(merge)
 layer=Dense(16,activation='linear')(layer)
-layer=Dense(32,activation='linear')(layer)
-layer=Dense(16,activation='linear')(layer)
-layer=Dense(32,activation='linear')(layer)
 layer=Dense(16,activation='linear')(layer)
 output=Dense(1)(layer)
 model=Model(inputs=(input1,input2),outputs=output)
@@ -132,7 +125,7 @@ x1_val,x2_val,y_val=x1_train[4*len(y_train)//5:],x2_train[4*len(y_train)//5:],y_
 model.fit([x1_train,x2_train],y_train
         ,epochs=1000,batch_size=len(x1_train)//40
         ,verbose=True,validation_data=([x1_val,x2_val],y_val)
-        ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=30,verbose=True,restore_best_weights=True))
+        ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=25,verbose=True,restore_best_weights=True))
 
 
 # 4. predict
@@ -148,10 +141,10 @@ evl+=f'런타임 : {round(time.time()-start_time,2)} 초\n'
 print(evl)
 x1_val,x2_val,y_val=x1_train,x2_train,y_train
 y_pred=model.predict([x1_val,x2_val],batch_size=200,verbose=True)
-plt.plot(range(len(y_val)),y_val,label='real')
-plt.plot(range(len(y_val)),y_pred,label='model')
-plt.legend()
-plt.show()
+# plt.plot(range(len(y_val)),y_val,label='real')
+# plt.plot(range(len(y_val)),y_pred,label='model')
+# plt.legend()
+# plt.show()
 
 # 5. save
 model.save_weights('./_save/samsung/keras53_samsung2_jsw.h5')

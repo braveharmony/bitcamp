@@ -84,7 +84,7 @@ y=hyundai[hyundai.columns[solve]]
 print(x1.shape,x2.shape)
 # plt.plot(range(len(y)),y)
 # plt.show()
-ts=19
+ts=20
 def split_and_scaling(x,ts):
     from sklearn.preprocessing import MinMaxScaler
     scaler=MinMaxScaler()

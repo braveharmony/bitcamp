@@ -125,7 +125,7 @@ model.compile(loss='mse',optimizer='adam')
 start_time=time.time()
 x1_val,x2_val,y_val=x1_train[4*len(y_train)//5:],x2_train[4*len(y_train)//5:],y_train[4*len(y_train)//5:]
 model.fit([x1_train,x2_train],y_train
-          ,epochs=500,batch_size=len(x1_train)//40
+          ,epochs=200,batch_size=len(x1_train)//50
           ,verbose=True,validation_data=([x1_val,x2_val],y_val)
           ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=50,verbose=True,restore_best_weights=True))
 
@@ -139,7 +139,6 @@ evl+=f'결정계수 : {r2_score(y_val,y_pred)}\n'
 evl+=f'런타임 : {round(time.time()-start_time,2)} 초\n'
 
 print(evl)
-
 
 x1_val,x2_val,y_val=x1_train,x2_train,y_train
 y_pred=model.predict([x1_val,x2_val],batch_size=200,verbose=True)

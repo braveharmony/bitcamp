@@ -9,14 +9,14 @@
 # 메일 제목 : 장승원 [현대 2차] 60,350.07원
 # 첨부 파일 : keras53_samsung2_jsw_submit.py
 # 첨부 파일 : keras53_samsung4_jsw_submit.py
-# 가중치    : _save/samsung/keras53_samsung2_jsw.h5 / hdf5
-# 가중치    : _save/samsung/keras53_samsung4_jsw.h5 / hdf5
+# 가중치    : _save/samsung/keras53_samsung2_jsw.h5
+# 가중치    : _save/samsung/keras53_samsung4_jsw.h5
 import tensorflow as tf
 import pandas as pd
 import random
 import numpy as np
-from tensorflow.keras.models import Sequential,Model
-from tensorflow.keras.layers import LSTM,Dense,Input,Concatenate,SimpleRNN
+from tensorflow.python.keras.models import Sequential,Model
+from tensorflow.python.keras.layers import LSTM,Dense,Input,Concatenate
 import matplotlib.pyplot as plt
 
 # 0. seed initialization
@@ -84,8 +84,7 @@ y=hyundai[hyundai.columns[solve]]
 print(x1.shape,x2.shape)
 # plt.plot(range(len(y)),y)
 # plt.show()
-ts=3
-
+ts=20
 def split_and_scaling(x,ts):
     from sklearn.preprocessing import MinMaxScaler
     scaler=MinMaxScaler()
@@ -108,7 +107,7 @@ y_train=y[ts+1:]
 input1=Input(shape=(x1_train.shape[1:]))
 input2=Input(shape=(x2_train.shape[1:]))
 merge=Concatenate()((input1,input2))
-layer=SimpleRNN(32)(merge)
+layer=LSTM(32)(merge)
 layer=Dense(16,activation='linear')(layer)
 layer=Dense(16,activation='linear')(layer)
 layer=Dense(16,activation='linear')(layer)
@@ -117,7 +116,6 @@ layer=Dense(16,activation='linear')(layer)
 output=Dense(1)(layer)
 model=Model(inputs=(input1,input2),outputs=output)
 model.summary()
-
 
 
 # 3. compile, training
@@ -132,25 +130,25 @@ model.load_weights('./_save/samsung/keras53_samsung4_jsw.h5')
 # 4. predict
 from sklearn.metrics import r2_score
 evl=str()
+
 evl+=f'구하는 값 : {samsung.columns[solve]}\n'
 evl+=f'직전값 : {y_train[-1]} 예측값:{round(float(model.predict([x1_test,x2_test],batch_size=200,verbose=True)[0,0]),2)}\n'
-y_pred=model.predict([x1_val,x2_val],batch_size=200,verbose=True)
-evl+=f'결정계수 : {r2_score(y_val,y_pred)}\n'
+evl+=f'loss : {model.evaluate([x1_val,x2_val],y_val,batch_size=200,verbose=True)}'
+evl+=f'결정계수 : {r2_score(y_val,model.predict([x1_val,x2_val],batch_size=200,verbose=True))}\n'
 evl+=f'런타임 : {round(time.time()-start_time,2)} 초\n'
 
-def standard_deviation(data):
-    n = len(data)
-    mean = np.mean(data)
-    deviations = ((x - mean) ** 2 for x in data)
-    variance = sum(deviations) / (n - 1)
-    standard_deviation = np.sqrt(variance)
-    return standard_deviation
-print(f'표준편차 : {standard_deviation(y)}')
+# def standard_deviation(data):
+#     n = len(data)
+#     mean = np.mean(data)
+#     deviations = ((x - mean) ** 2 for x in data)
+#     variance = sum(deviations) / (n - 1)
+#     standard_deviation = np.sqrt(variance)
+#     return standard_deviation
+# print(f'표준편차 : {standard_deviation(y)}')
 
 print(evl)
 x1_val,x2_val,y_val=x1_train,x2_train,y_train
-y_pred=model.predict([x1_val,x2_val],batch_size=200,verbose=True)
 plt.plot(range(len(y_val)),y_val,label='real')
-plt.plot(range(len(y_val)),y_pred,label='model')
+plt.plot(range(len(y_val)),model.predict([x1_val,x2_val],batch_size=200,verbose=True),label='model')
 plt.legend()
 plt.show()

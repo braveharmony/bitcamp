@@ -16,7 +16,7 @@ import pandas as pd
 import random
 import numpy as np
 from tensorflow.python.keras.models import Sequential,Model
-from tensorflow.python.keras.layers import LSTM,Dense,Input,Concatenate
+from tensorflow.python.keras.layers import LSTM,Dense,Input,Concatenate,SimpleRNN
 import matplotlib.pyplot as plt
 
 # 0. seed initialization
@@ -107,7 +107,7 @@ y_train=y[ts+1:]
 input1=Input(shape=(x1_train.shape[1:]))
 input2=Input(shape=(x2_train.shape[1:]))
 merge=Concatenate()((input1,input2))
-layer=LSTM(32)(merge)
+layer=SimpleRNN(32)(merge)
 layer=Dense(16,activation='linear')(layer)
 layer=Dense(16,activation='linear')(layer)
 layer=Dense(16,activation='linear')(layer)
@@ -126,9 +126,9 @@ model.compile(loss='mse',optimizer='adam')
 start_time=time.time()
 x1_val,x2_val,y_val=x1_train[4*len(y_train)//5:],x2_train[4*len(y_train)//5:],y_train[4*len(y_train)//5:]
 model.fit([x1_train,x2_train],y_train
-          ,epochs=500,batch_size=len(x1_train)//40
+          ,epochs=1000,batch_size=len(x1_train)//40
           ,verbose=True,validation_data=([x1_val,x2_val],y_val)
-          ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=100,verbose=True,restore_best_weights=True))
+          ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=50,verbose=True,restore_best_weights=True))
 
 # 4. predict
 from sklearn.metrics import r2_score

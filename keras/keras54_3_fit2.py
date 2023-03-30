@@ -33,7 +33,7 @@ test_datagen=ImageDataGenerator(
 )
 
 xy_train=train_datagen.flow_from_directory('d:/study_data/brain/train/'
-                                  ,target_size=(100,100)
+                                  ,target_size=(128,128)
                                   ,batch_size=5
                                   ,class_mode='binary'
                                   ,color_mode='grayscale'
@@ -42,7 +42,7 @@ xy_train=train_datagen.flow_from_directory('d:/study_data/brain/train/'
                                   )
 
 xy_test=test_datagen.flow_from_directory('d:/study_data/brain/test/'
-                                  ,target_size=(100,100)
+                                  ,target_size=(128,128)
                                   ,batch_size=5
                                   ,class_mode='binary'
                                   ,color_mode='grayscale'
@@ -54,29 +54,29 @@ xy_test=test_datagen.flow_from_directory('d:/study_data/brain/test/'
 from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Dense,Flatten,Conv2DTranspose,MaxPool2D,Dropout
 model=Sequential()
-model.add(Conv2D(128,(3,3),padding='same',input_shape=xy_train[0][0].shape[1:],activation=LeakyReLU(0.5)))
+model.add(Conv2D(128,(3,3),padding='same',input_shape=xy_train[0][0].shape[1:],activation=LeakyReLU(0.75)))
 model.add(MaxPool2D())
-model.add(Conv2D(256,(3,3),padding='same',activation=LeakyReLU(0.5)))
+model.add(Conv2D(256,(3,3),padding='same',activation=LeakyReLU(0.75)))
 model.add(MaxPool2D())
-model.add(Conv2D(256,(2,2),padding='valid',activation=LeakyReLU(0.5)))
+model.add(Conv2D(512,(3,3),padding='valid',activation=LeakyReLU(0.75)))
 model.add(MaxPool2D())
-model.add(Conv2D(256,(3,3),padding='same',activation=LeakyReLU(0.5)))
+model.add(Conv2D(256,(3,3),padding='same',activation=LeakyReLU(0.75)))
 model.add(MaxPool2D())
-model.add(Conv2D(256,(3,3),padding='valid',activation=LeakyReLU(0.5)))
+model.add(Conv2D(512,(3,3),padding='valid',activation=LeakyReLU(0.75)))
 model.add(Flatten())
-model.add(Dense(128,activation=LeakyReLU(0.5)))
-model.add(Dense(64,activation=LeakyReLU(0.5)))
-model.add(Dense(128,activation=LeakyReLU(0.5)))
-model.add(Dense(32,activation=LeakyReLU(0.5)))
+model.add(Dense(128,activation=LeakyReLU(0.75)))
+model.add(Dense(64,activation=LeakyReLU(0.75)))
+model.add(Dense(128,activation=LeakyReLU(0.75)))
+model.add(Dense(32,activation=LeakyReLU(0.75)))
 model.add(Dense(1,activation='sigmoid'))
 
 # 3. compile, training
 from tensorflow.python.keras.callbacks import EarlyStopping
 model.compile(loss='binary_crossentropy',optimizer='adam',metrics='acc')
 # model.fit(xy_train[0][0],xy_train[0][1],epochs=10)
-hist=model.fit_generator(xy_train,32,epochs=1000,validation_data=xy_test,
-                    validation_steps=24
-                    ,callbacks=EarlyStopping(monitor='val_acc',mode='max',patience=50,restore_best_weights=True,verbose=True))
+hist=model.fit(xy_train,epochs=1000,validation_data=xy_test,steps_per_epoch=32,validation_steps=24
+                    ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=50,restore_best_weights=True,verbose=True))
+
 val_acc_index=hist.history['val_acc'].index(max(hist.history['val_acc']))
 print('loss:',hist.history['loss'][val_acc_index])
 print('val_loss:',hist.history['val_loss'][val_acc_index])
@@ -87,9 +87,10 @@ import matplotlib.pyplot as plt
 plt.subplot(1,2,1)
 plt.plot(range(len(hist.history['loss'])),hist.history['loss'],label='loss')
 plt.plot(range(len(hist.history['val_loss'])),hist.history['val_loss'],label='val_loss')
+plt.ylim((0,1))
 plt.legend()
 plt.subplot(1,2,2)
-plt.plot(range(len(hist.history['acc'])),hist.history['acc'],label='loss')
-plt.plot(range(len(hist.history['val_acc'])),hist.history['val_acc'],label='val_loss')
+plt.plot(range(len(hist.history['acc'])),hist.history['acc'],label='acc')
+plt.plot(range(len(hist.history['val_acc'])),hist.history['val_acc'],label='val_acc')
 plt.legend()
 plt.show()

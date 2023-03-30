@@ -16,7 +16,7 @@ import pandas as pd
 import random
 import numpy as np
 from tensorflow.python.keras.models import Sequential,Model
-from tensorflow.python.keras.layers import LSTM,Dense,Input,Concatenate
+from tensorflow.python.keras.layers import LSTM,Dense,Input,Concatenate,SimpleRNN
 import matplotlib.pyplot as plt
 
 # 0. seed initialization
@@ -107,7 +107,7 @@ y_train=y[ts+1:]
 input1=Input(shape=(x1_train.shape[1:]))
 input2=Input(shape=(x2_train.shape[1:]))
 merge=Concatenate()((input1,input2))
-layer=LSTM(32)(merge)
+layer=SimpleRNN(32)(merge)
 layer=Dense(16,activation='linear')(layer)
 layer=Dense(16,activation='linear')(layer)
 layer=Dense(16,activation='linear')(layer)
@@ -116,7 +116,6 @@ layer=Dense(16,activation='linear')(layer)
 output=Dense(1)(layer)
 model=Model(inputs=(input1,input2),outputs=output)
 model.summary()
-
 
 # 3. compile, training
 from tensorflow.keras.callbacks import EarlyStopping 

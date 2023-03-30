@@ -107,7 +107,9 @@ y_train=y[ts+1:]
 input1=Input(shape=(x1_train.shape[1:]))
 input2=Input(shape=(x2_train.shape[1:]))
 merge=Concatenate()((input1,input2))
-layer=SimpleRNN(32)(merge)
+layer=SimpleRNN(64)(merge)
+layer=Dense(16,activation='linear')(layer)
+layer=Dense(16,activation='linear')(layer)
 layer=Dense(16,activation='linear')(layer)
 layer=Dense(16,activation='linear')(layer)
 layer=Dense(16,activation='linear')(layer)
@@ -128,7 +130,7 @@ x1_val,x2_val,y_val=x1_train[4*len(y_train)//5:],x2_train[4*len(y_train)//5:],y_
 model.fit([x1_train,x2_train],y_train
           ,epochs=1000,batch_size=len(x1_train)//40
           ,verbose=True,validation_data=([x1_val,x2_val],y_val)
-          ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=50,verbose=True,restore_best_weights=True))
+          ,callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=100,verbose=True,restore_best_weights=True))
 
 # 4. predict
 from sklearn.metrics import r2_score

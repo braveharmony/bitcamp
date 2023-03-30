@@ -54,9 +54,9 @@ xy_test=test_datagen.flow_from_directory('d:/study_data/brain/test/'
 from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Dense,Flatten,Conv2DTranspose,MaxPool2D,Dropout
 model=Sequential()
-model.add(Conv2D(64,(4,4),padding='same',input_shape=xy_train[0][0].shape[1:],activation=LeakyReLU(0.5)))
+model.add(Conv2D(128,(3,3),padding='same',input_shape=xy_train[0][0].shape[1:],activation=LeakyReLU(0.5)))
 model.add(MaxPool2D())
-model.add(Conv2D(128,(3,3),padding='same',activation=LeakyReLU(0.5)))
+model.add(Conv2D(256,(3,3),padding='same',activation=LeakyReLU(0.5)))
 model.add(MaxPool2D())
 model.add(Conv2D(256,(2,2),padding='valid',activation=LeakyReLU(0.5)))
 model.add(MaxPool2D())
@@ -65,17 +65,10 @@ model.add(MaxPool2D())
 model.add(Conv2D(256,(3,3),padding='valid',activation=LeakyReLU(0.5)))
 model.add(Flatten())
 model.add(Dense(128,activation=LeakyReLU(0.5)))
-model.add(Dropout(1/16))
 model.add(Dense(64,activation=LeakyReLU(0.5)))
-model.add(Dropout(1/16))
 model.add(Dense(128,activation=LeakyReLU(0.5)))
-model.add(Dropout(1/16))
-model.add(Dense(64,activation=LeakyReLU(0.5)))
-model.add(Dropout(1/16))
 model.add(Dense(32,activation=LeakyReLU(0.5)))
-model.add(Dropout(1/16))
 model.add(Dense(1,activation='sigmoid'))
-
 
 # 3. compile, training
 from tensorflow.python.keras.callbacks import EarlyStopping
@@ -83,8 +76,12 @@ model.compile(loss='binary_crossentropy',optimizer='adam',metrics='acc')
 # model.fit(xy_train[0][0],xy_train[0][1],epochs=10)
 hist=model.fit_generator(xy_train,32,epochs=1000,validation_data=xy_test,
                     validation_steps=24
-                    ,callbacks=EarlyStopping(monitor='val_acc',mode='max',patience=30,restore_best_weights=True,verbose=True))
-
+                    ,callbacks=EarlyStopping(monitor='val_acc',mode='max',patience=50,restore_best_weights=True,verbose=True))
+val_acc_index=hist.history['val_acc'].index(max(hist.history['val_acc']))
+print('loss:',hist.history['loss'][val_acc_index])
+print('val_loss:',hist.history['val_loss'][val_acc_index])
+print('acc:',hist.history['acc'][val_acc_index])
+print('val_acc:',hist.history['val_acc'][val_acc_index])
 
 import matplotlib.pyplot as plt
 plt.subplot(1,2,1)

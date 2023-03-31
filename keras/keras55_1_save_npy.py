@@ -32,7 +32,7 @@ test_datagen=ImageDataGenerator(
     rescale=1/255
 )
 
-xy_train=train_datagen.flow_from_directory('d:/study_data/brain/train/'
+xy_train=train_datagen.flow_from_directory('d:/study_data/_data/brain/train/'
                                   ,target_size=(100,100)
                                   ,batch_size=5
                                   ,class_mode='categorical'
@@ -41,7 +41,7 @@ xy_train=train_datagen.flow_from_directory('d:/study_data/brain/train/'
                                   ,shuffle=True
                                   )
 
-xy_test=test_datagen.flow_from_directory('d:/study_data/brain/test/'
+xy_test=test_datagen.flow_from_directory('d:/study_data/_data/brain/test/'
                                   ,target_size=(100,100)
                                   ,batch_size=5
                                   ,class_mode='categorical'

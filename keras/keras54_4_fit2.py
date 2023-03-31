@@ -49,7 +49,6 @@ xy_test=test_datagen.flow_from_directory('d:/study_data/brain/test/'
                                   ,shuffle=True
                                   )
 
-
 # 2. model build
 from tensorflow.python.keras.models import Sequential
 from tensorflow.python.keras.layers import Dense,Flatten,Conv2DTranspose,MaxPool2D,Dropout

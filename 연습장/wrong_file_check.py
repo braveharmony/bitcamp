@@ -15,5 +15,5 @@ def find_corrupted_images(directory):
     return corrupted_images
 
 # Find corrupted images without deleting them
-corrupted_images = find_corrupted_images('d:/study_data/_data/cat_dog/PetImages')
+corrupted_images = find_corrupted_images('d:/study_data/_data/horse-or-human/train')
 print("Corrupted images found:", corrupted_images)

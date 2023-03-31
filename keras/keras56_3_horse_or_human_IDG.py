@@ -7,21 +7,6 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img
 import time
 
 
-from PIL import UnidentifiedImageError
-import io
-
-# Custom load_img function with exception handling
-def custom_load_img(path, grayscale=False, color_mode='rgb', target_size=None,
-                    interpolation='nearest'):
-    try:
-        return load_img(path, grayscale=grayscale, color_mode=color_mode,
-                        target_size=target_size, interpolation=interpolation)
-    except UnidentifiedImageError:
-        print(f"Cannot identify image file {path}, skipping...")
-        return None
-
-ImageDataGenerator.load_img = custom_load_img
-
 # 0. seed initialization
 seed = 0
 random.seed(seed)
@@ -35,7 +20,7 @@ datagen=ImageDataGenerator(
     rescale=1/255,
 )
 
-path='d:/study_data/_data/cat_dog/PetImages'
+path='d:/study_data/_data/horse-or-human/train'
 
 xy=datagen.flow_from_directory(directory=path
                                   ,target_size=(100,100)
@@ -65,7 +50,7 @@ print(y[:5])
 print(f'runtime for generate : {time.time()-save_start}')
 
 save_start=time.time()
-path='d:/study_data/_save/cat_dog/'
+path='d:/study_data/_save/horse-or-human/'
 np.save(file=f'{path}x.npy',arr=x)
 np.save(file=f'{path}y.npy',arr=y)
 
@@ -73,7 +58,7 @@ np.save(file=f'{path}y.npy',arr=y)
 print(f'runtime for save : {time.time()-save_start}')
 
 save_start=time.time()
-path='d:/study_data/_save/cat_dog/'
+path='d:/study_data/_save/horse-or-human/'
 x=np.load(file=f'{path}x.npy')
 y=np.load(file=f'{path}y.npy')
 

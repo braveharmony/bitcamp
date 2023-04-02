@@ -20,7 +20,7 @@ datagen=ImageDataGenerator(
     rescale=1/255,
 )
 
-path='d:/study_data/_data/cat_dog/PetImages'
+path='d:/study_data/_data/rps/'
 
 xy=datagen.flow_from_directory(directory=path
                                   ,target_size=(100,100)
@@ -50,7 +50,7 @@ print(y[:5])
 print(f'runtime for generate : {time.time()-save_start}')
 
 save_start=time.time()
-path='d:/study_data/_save/cat_dog/'
+path='d:/study_data/_save/rps/'
 np.save(file=f'{path}x.npy',arr=x)
 np.save(file=f'{path}y.npy',arr=y)
 
@@ -58,7 +58,7 @@ np.save(file=f'{path}y.npy',arr=y)
 print(f'runtime for save : {time.time()-save_start}')
 
 save_start=time.time()
-path='d:/study_data/_save/cat_dog/'
+path='d:/study_data/_save/rps/'
 x=np.load(file=f'{path}x.npy')
 y=np.load(file=f'{path}y.npy')
 

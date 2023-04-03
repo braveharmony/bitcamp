@@ -42,7 +42,7 @@ model.add(Conv2D(512,(2,2),padding='valid',activation=LeakyReLU(0.75)))
 model.add(MaxPool2D())
 model.add(Conv2D(512,(3,3),padding='same',activation=LeakyReLU(0.75)))
 model.add(MaxPool2D())
-model.add(Conv2D(1024,(2,2),padding='same',activation=LeakyReLU(0.75)))
+model.add(Conv2D(512,(3,3),padding='same',activation=LeakyReLU(0.75)))
 model.add(MaxPool2D())
 model.add(Conv2D(512,(2,2),padding='valid',activation=LeakyReLU(0.75)))
 model.add(Conv2D(512,(2,2),padding='valid',activation=LeakyReLU(0.75)))
@@ -57,6 +57,7 @@ model.add(Dense(32,activation=LeakyReLU(0.75)))
 model.add(Dropout(1/16))
 model.add(Dense(y_train.shape[1],activation='softmax'))
 model.summary()
+
 # 3. compile, training
 from tensorflow.python.keras.callbacks import EarlyStopping
 model.compile(loss='categorical_crossentropy',optimizer='adam',metrics='acc')
@@ -64,7 +65,7 @@ model.compile(loss='categorical_crossentropy',optimizer='adam',metrics='acc')
 hist=model.fit(x_train,y_train,epochs=1000,validation_data=(x_test,y_test),batch_size=4,
                     callbacks=EarlyStopping(monitor='val_acc',mode='max',patience=100,restore_best_weights=True,verbose=True))
 
-val_acc_index=hist.history['val_loss'].index(max(hist.history['val_loss']))
+val_acc_index=hist.history['val_loss'].index(min(hist.history['val_loss']))
 print('loss:',hist.history['loss'][val_acc_index])
 print('val_loss:',hist.history['val_loss'][val_acc_index])
 print('acc:',hist.history['acc'][val_acc_index])

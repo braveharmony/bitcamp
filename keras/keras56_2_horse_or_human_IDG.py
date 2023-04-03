@@ -20,11 +20,11 @@ datagen=ImageDataGenerator(
     rescale=1/255,
 )
 
-path='d:/study_data/_data/horse-or-human/train'
-
+path='d:/study_data/_data/horse-or-human'
+target_size=(100,100)
 xy=datagen.flow_from_directory(directory=path
-                                  ,target_size=(100,100)
-                                  ,batch_size=24998
+                                  ,target_size=target_size
+                                  ,batch_size=1027
                                   ,class_mode='categorical'
                                 #   ,color_mode='grayscale'
                                   ,color_mode='rgb'

@@ -23,7 +23,7 @@ datagen=ImageDataGenerator(
 path='d:/study_data/_data/cat_dog/PetImages'
 
 xy=datagen.flow_from_directory(directory=path
-                                  ,target_size=(100,100)
+                                  ,target_size=(75,75)
                                   ,batch_size=24998
                                   ,class_mode='categorical'
                                 #   ,color_mode='grayscale'

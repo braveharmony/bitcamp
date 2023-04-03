@@ -34,10 +34,11 @@ print(x_data[0].shape)
 print(x_data[1].shape)
 
 
-# import matplotlib.pyplot as plt
-# plt.figure(figsize=(7,7))
-# for i in range(1,50):
-#     plt.subplot(7,7,i)
-#     plt.axis('off')
-#     plt.imshow(x_data[0][0][i],cmap='gray')
-# plt.show()
+import matplotlib.pyplot as plt
+plt.figure(figsize=(7,7))
+for i in range(1,50):
+    plt.subplot(7,7,i)
+    plt.axis('off')
+    # plt.imshow(x_data[0][0][i],cmap='gray')
+    plt.imshow(x_data[0][i],cmap='gray')
+plt.show()

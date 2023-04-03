@@ -32,7 +32,7 @@ test_datagen=ImageDataGenerator(
     rescale=1/255
 )
 
-xy_train=train_datagen.flow_from_directory('d:/study_data/brain/train/'
+xy_train=train_datagen.flow_from_directory('d:/study_data/_data/brain/train/'
                                   ,target_size=(200,200)
                                   ,batch_size=5
                                   ,class_mode='binary'
@@ -40,7 +40,7 @@ xy_train=train_datagen.flow_from_directory('d:/study_data/brain/train/'
                                   ,shuffle=True
                                   )
 
-xy_test=test_datagen.flow_from_directory('d:/study_data/brain/test/'
+xy_test=test_datagen.flow_from_directory('d:/study_data/_data/brain/test/'
                                   ,target_size=(200,200)
                                   ,batch_size=5
                                   ,class_mode='binary'
@@ -57,3 +57,13 @@ target=np.reshape(target,([target.shape[0]*target.shape[1]]+list(target.shape[2:
 print(data.shape)
 print(target.shape)
 print(target[:10])
+
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+plt.figure(figsize=(7,7))
+for i in range(1,50):
+    plt.subplot(7,7,i)
+    plt.axis('off')
+    plt.grid(False)
+    plt.imshow(data[i],cmap='gray')
+plt.show()

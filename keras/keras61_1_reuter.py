@@ -49,3 +49,6 @@ model.compile(loss='categorical_crossentropy',optimizer='adam',metrics='acc')
 model.fit(x_train,y_train,validation_data=(x_test,y_test)
           ,batch_size=100,verbose=True,epochs=1000
           ,callbacks=EarlyStopping(monitor='val_acc',mode='max',patience=50))
+
+def split(dataset,timestep):
+    return list(dataset[i:i+timestep] for i in range(len(dataset)-timestep+1))

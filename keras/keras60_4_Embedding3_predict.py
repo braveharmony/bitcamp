@@ -28,7 +28,6 @@ def pad_and_encoding(x,onehot):
     pad_x=pad_sequences(x,padding='pre',maxlen=8)
     return np.array([onehot.transform(pad_x[i].reshape(-1,1)).toarray() for i in range(len(pad_x))]),onehot
 x_pad,onehot=pad_and_encoding(x,onehot)
-x_pad=np.reshape(x_pad,list(x_pad.shape)+[1])
 
 # from tensorflow.keras.preprocessing.sequence import pad_sequences
 # x_pad=pad_sequences(x,padding='pre',maxlen=max((len(i)for i in x)))
@@ -36,11 +35,13 @@ x_pad=np.reshape(x_pad,list(x_pad.shape)+[1])
 
 # 2. model build
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv2D,Dense,Flatten,Dropout,Input,LeakyReLU,Embedding,LSTM,Reshape
+from tensorflow.keras.layers import Conv2D,Dense,Flatten,Dropout,Input,LeakyReLU,Embedding,LSTM,Reshape,Conv1D
 model=Sequential()
 model.add(Input(x_pad.shape[1:]))
-model.add(Conv2D(128,(1,x_pad.shape[2]),padding='valid',activation=LeakyReLU(0.5)))
-model.add(Conv2D(128,(x_pad.shape[1],1),padding='valid',activation=LeakyReLU(0.5)))
+model.add(Conv1D(32,3))
+model.add(Conv1D(32,3))
+model.add(Conv1D(32,3))
+model.add(Conv1D(32,2))
 model.add(Flatten())
 model.add(Dense(64,activation=LeakyReLU(0.5)))
 model.add(Dropout(0.125))
@@ -77,4 +78,4 @@ print('acc : ',acc)
 
 x_predict='나는 성호가 정말 재미없다 너무 정말'
 x_predict,onehot=pad_and_encoding(token.texts_to_sequences([x_predict]),onehot)
-print(f'y_predict : {model.predict(np.reshape(x_predict,list(x_predict.shape)+[1]))}')
+print(f'y_predict : {model.predict(x_predict)}')

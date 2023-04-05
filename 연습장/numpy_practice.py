@@ -1,25 +1,26 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-def sigmoid(x):
-    return 1 / (1 + np.exp(-x))
-x = np.linspace(-10, 10, 100)
-y = sigmoid(x)
-plt.subplot(1,2,1)
-plt.plot(x, y)
-x =np.array(list((i for i in range(-9,10) if i != 0)))
-y= np.array(list((1 if i > 0 else 0 for i in x)))
-y_hat=sigmoid(x)
-plt.scatter(x,y)
-plt.scatter(x,y_hat)
-plt.title('sigmoid')
+t=np.linspace(-10,10,1000,endpoint=False)
+x=np.sin(2*np.pi*0*t)
+for freq in range(1,10):
+    x=x+np.sin(2*np.pi*freq*t)#-2*np.cos(2*np.pi*freq*t)
+fftx=np.fft.fftshift(np.fft.fft(x))
+print(fftx[:10])
+r_fftx=np.real(fftx)
+i_fftx=np.imag(fftx)
+print(r_fftx[:10])
+print(i_fftx[:10])
 
-def binary_cross_entropy(y, y_hat):
-    epsilon = 1e-7
-    bce =  -y * np.log(y_hat + epsilon) - (1 - y) * np.log(1 - y_hat + epsilon)
-    return bce
-bcd=binary_cross_entropy(y,y_hat)
-plt.subplot(1,2,2)
-plt.scatter(x,bcd)
-plt.title('binary_cross_entropy')
+
+
+plt.subplot(2,2,1)
+plt.plot(t,x)
+plt.title('원본 함수')
+plt.subplot(2,2,2)
+plt.plot(freqt,r_fftx)
+plt.title('리얼 함수')
+plt.subplot(2,2,3)
+plt.plot(freqt,i_fftx)
+plt.title('이메지너리 함수')
 plt.show()

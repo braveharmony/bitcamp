@@ -1,6 +1,7 @@
 from tensorflow.keras.preprocessing.text import Tokenizer
 import numpy as np
 import itertools
+
 docs= ['너무 재밋어요','참 최고에요','참 잘 만든 영화에요',
        '추천하고 싶은 영화입니다.','한 번 더 보고 싶네요','글쎄요',
        '별로에요','생각보다 지루해요','연기가 어색해요',

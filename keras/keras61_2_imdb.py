@@ -30,15 +30,15 @@ print(x_test.shape,y_test.shape)
 
 # 2. model build
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense,Embedding,Conv1D,SimpleRNN,Dropout,Input
+from tensorflow.keras.layers import Dense,Embedding,Conv1D,SimpleRNN,Dropout,Input,LeakyReLU
 model=Sequential()
 model.add(Input(shape=x_train.shape[1:]))
 model.add(Embedding(10000,128))
 for i in range(7):
-    model.add(Conv1D(128,31,activation='relu'))
+    model.add(Conv1D(32,31,activation=LeakyReLU(0.5)))
 model.add(SimpleRNN(32))
 for i in range(15):
-    model.add(Dense(64,activation='relu'))
+    model.add(Dense(64,activation=LeakyReLU(0.5)))
 model.add(Dense(1,activation='sigmoid'))
 model.summary()
 
@@ -46,5 +46,5 @@ model.summary()
 from tensorflow.keras.callbacks import EarlyStopping
 model.compile(loss='binary_crossentropy',optimizer='adam',metrics='acc')
 model.fit(x_train,y_train,validation_data=(x_test,y_test)
-          ,batch_size=100,epochs=1,verbose=True
-          ,callbacks=EarlyStopping(monitor='val_acc',mode='max',patience=50,restore_best_weights=True,verbose=True))
+          ,batch_size=1000,epochs=100,verbose=True
+          ,callbacks=EarlyStopping(monitor='val_acc',mode='max',patience=3,restore_best_weights=True,verbose=True))

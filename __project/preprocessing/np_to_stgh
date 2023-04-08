@@ -1,0 +1,36 @@
+import numpy as np
+import librosa
+import time
+
+def file_path(file_extension, filenum, folder=''):
+    return f"d:/study_data/_project/_data/{folder}/{filenum}.{file_extension}"
+
+index = np.load(file_path("npy", "musicindex"))
+musics = ("Crossing!", "Dreaming!", "Flyers!!!", "GlowMap", "Harmony4You", "Rainbow", "UNION!!")
+idolnum = np.load(file_path("npy", "idolnum"))
+
+starttime = time.time()
+
+for folder in musics:
+    for filenum in idolnum:
+        audio_signal = np.load(file_path("npy", filenum, folder))
+        sample_rate = np.load(file_path("npy", f"{filenum}sr", folder))[0]
+        freq = np.fft.fftfreq(len(audio_signal), 1 / sample_rate)
+
+        # Compute complex STFT
+        stft_result = np.array([librosa.stft(audio_signal[i], n_fft=sample_rate // 50, 
+                                               hop_length=sample_rate // 200, 
+                                               win_length=sample_rate // 50) for i in range(len(audio_signal))])
+        
+        # Separate real and imaginary parts
+        stft_real = np.real(stft_result)
+        stft_imag = np.imag(stft_result)
+
+        # Stack real and imaginary parts along a new axis
+        stft_4d = np.stack((stft_real, stft_imag), axis=-1)
+
+        np.save(file_path("npy", f"{filenum}stft_4d", folder), stft_4d.astype(np.float32))
+        
+        print(f"{folder}폴더 {filenum}번 save완료! sr: {sample_rate}")
+        print(f"runtime : {time.time()-starttime}")
+        print(stft_4d.shape)

@@ -14,7 +14,7 @@ for folder in musics:
         sample_rate=np.load(f"d:/study_data/_project/_data/{folder}/{filenum}sr.npy")[0]
         freq=np.fft.fftfreq(len(audio_signal),1/sample_rate)
         mfcc=np.array([librosa.feature.mfcc(y=audio_signal[i], sr=sample_rate, n_mfcc=sample_rate//100
-                            , n_fft=sample_rate//50, hop_length=sample_rate//200,center=True,n_mels=20).T for i in range(len(audio_signal))])
+                            , n_fft=sample_rate//50, hop_length=sample_rate//200,center=True,n_mels=20,win_length=sample_rate//50).T for i in range(len(audio_signal))])
         np.save(f"d:/study_data/_project/_data/{folder}/{filenum}mfcc.npy", mfcc.astype(np.float32))
         print(f'{folder}폴더 {filenum}번 save완료! sr: {sample_rate}')
         print(f'runtime : {time.time()-starttime}')

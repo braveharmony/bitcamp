@@ -20,7 +20,7 @@ for folder in musics:
         # Compute complex STFT
         stft_result = np.array([librosa.stft(audio_signal[i], n_fft=sample_rate // 50, 
                                                hop_length=sample_rate // 200, 
-                                               win_length=sample_rate // 50) for i in range(len(audio_signal))])
+                                               win_length=sample_rate // 50)[:n_fft=sample_rate // 100] for i in range(len(audio_signal))])
         
         # Separate real and imaginary parts
         stft_real = np.real(stft_result)

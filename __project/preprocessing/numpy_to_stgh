@@ -15,7 +15,6 @@ for folder in musics:
     for filenum in idolnum:
         audio_signal = np.load(file_path("npy", filenum, folder))
         sample_rate = np.load(file_path("npy", f"{filenum}sr", folder))[0]
-        freq = np.fft.fftfreq(len(audio_signal), 1 / sample_rate)
 
         # Compute complex STFT
         stft_result = np.array([librosa.stft(audio_signal[i], n_fft=sample_rate // 50, 

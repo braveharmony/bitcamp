@@ -1,12 +1,12 @@
 import numpy as np
 import librosa
 import time
-
+import os
 def file_path(file_extension, filenum, folder=''):
     return f"d:/study_data/_project/_data/{folder}/{filenum}.{file_extension}"
 
-index = np.load(file_path("npy", "musicindex"))
-musics = ("Crossing!", "Dreaming!", "Flyers!!!", "GlowMap", "Harmony4You", "Rainbow", "UNION!!")
+musics=('Crossing!','Dreaming!','Flyers!!!','GlowMap','Harmony4You','Rainbow','UNION!!')
+
 idolnum = np.load(file_path("npy", "idolnum"))
 
 starttime = time.time()

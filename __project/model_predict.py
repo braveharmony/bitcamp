@@ -36,7 +36,8 @@ def file_path(file_extension, filenum, folder=''):
     return f"d:/study_data/_project/_data/{folder}/{filenum}.{file_extension}"
 
 # 모델 테스트할때 쓸 파일
-model=load_model('./__project/_model_save/stft_model_test.h5')
+model=load_model('D:/study_data/_project/model/stft_model_test_0.67.h5')
+model.summary()
 
 music_sample=('Crossing!','Dreaming!','Flyers!!!','GlowMap','Harmony4You','Rainbow','UNION!!')
 index = list(set(range(7))-set(np.load(f"d:/study_data/_project/_data/musicindex.npy")))
@@ -59,4 +60,6 @@ for folder in musics:
         count+=1
         if y_pred==y_true:
             correct+=1
-print(f'acc : {correct/count}')
+        print(f'예측 아이돌 넘버 : {y_pred+1} 실제 아이돌 넘버 : {y_true+1}')
+
+print(f'맞춘 수: {correct}, acc : {correct/count}')

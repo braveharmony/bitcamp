@@ -36,11 +36,15 @@ def file_path(file_extension, filenum, folder=''):
     return f"d:/study_data/_project/_data/{folder}/{filenum}.{file_extension}"
 
 # 모델 테스트할때 쓸 파일
-model=load_model('D:/study_data/_project/model/stft_model_test_0.67.h5')
+model=load_model('D:/study_data/_project/model/stft_model_test_0.98.h5')
 model.summary()
 
 music_sample=('Crossing!','Dreaming!','Flyers!!!','GlowMap','Harmony4You','Rainbow','UNION!!')
-index = list(set(range(7))-set(np.load(f"d:/study_data/_project/_data/musicindex.npy")))
+index=set(np.load(f"d:/study_data/_project/_data/musicindex.npy"))
+if len(index)==len(music_sample):
+    index=[0]
+else : index = list(set(range(7))-set(np.load(f"d:/study_data/_project/_data/musicindex.npy")))
+# index = list(set(range(7))-set(np.load(f"d:/study_data/_project/_data/musicindex.npy")))
 musics=(music_sample[i] for i in index)
 idolnum = np.load(file_path("npy", "idolnum"))
 count=0

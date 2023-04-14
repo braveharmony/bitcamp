@@ -3,7 +3,7 @@ import tensorflow as tf
 import random
 from tensorflow.keras.models import Model,Sequential
 from tensorflow.keras.layers import Input,Dense,Dropout,Conv2D,SimpleRNN,Concatenate,\
-    LeakyReLU,Flatten,LSTM,MaxPool2D,BatchNormalization,GaussianNoise,GlobalAveragePooling2D
+    LeakyReLU,Flatten,LSTM,MaxPool2D,BatchNormalization,GaussianNoise,GlobalAveragePooling2D,AveragePooling2D
 from sklearn.model_selection import train_test_split
 import time
 from tensorflow.keras.utils import Sequence
@@ -64,32 +64,32 @@ shape=x_train.shape[1:]
 # 2. model build
 model=Sequential()
 model.add(Input(shape=shape))
-model.add(Conv2D(32,(8,2),padding='same',activation=LeakyReLU(0.25)))
-# model.add(GaussianNoise(0.1))
+model.add(Conv2D(256,(8,2),padding='same',activation=LeakyReLU(0.25)))
 model.add(BatchNormalization())
-model.add(MaxPool2D())
-model.add(Conv2D(64,(4,2),padding='same',activation=LeakyReLU(0.25)))
+model.add(AveragePooling2D())
+model.add(Conv2D(256,(2,2),padding='same',activation=LeakyReLU(0.25)))
 model.add(BatchNormalization())
-model.add(MaxPool2D())
-model.add(Conv2D(128,(2,2),padding='same',activation=LeakyReLU(0.25)))
+model.add(AveragePooling2D())
+model.add(Conv2D(512,(4,2),padding='same',activation=LeakyReLU(0.25)))
 model.add(MaxPool2D())
 model.add(Conv2D(256,(3,1),padding='valid',activation=LeakyReLU(0.25)))
 model.add(MaxPool2D())
-model.add(Conv2D(512,(4,1),padding='same',activation=LeakyReLU(0.25)))
+model.add(Conv2D(512,(2,2),padding='same',activation=LeakyReLU(0.25)))
 model.add(MaxPool2D())
-model.add(Conv2D(1024,(2,2),padding='valid',activation=LeakyReLU(0.25)))
+model.add(Conv2D(256,(2,2),padding='valid',activation=LeakyReLU(0.25)))
 model.add(Flatten())
 model.add(Dense(128,activation=LeakyReLU(0.25)))
 model.add(BatchNormalization())
-# model.add(Dropout(1/16))
+model.add(Dropout(1/16))
 model.add(Dense(256,activation=LeakyReLU(0.25)))
-# model.add(Dropout(1/16))
+model.add(BatchNormalization())
+model.add(Dropout(1/16))
 model.add(Dense(128,activation=LeakyReLU(0.25)))
-# model.add(Dropout(1/16))
+model.add(Dropout(1/16))
 model.add(Dense(256,activation=LeakyReLU(0.25)))
-# model.add(Dropout(1/16))
+model.add(Dropout(1/16))
 model.add(Dense(128,activation=LeakyReLU(0.25)))
-# model.add(Dropout(1/16))
+model.add(Dropout(1/16))
 model.add(Dense(52,activation='softmax'))
 
 model.summary()
@@ -98,7 +98,7 @@ model.summary()
 from tensorflow.keras.callbacks import EarlyStopping
 model.compile(loss='categorical_crossentropy',optimizer='adam',metrics='acc')
 hist=model.fit(x_train,y_train,batch_size=8,epochs=10000,shuffle=True
-          ,validation_data=(x_test,y_test),callbacks=EarlyStopping(monitor='val_loss',mode='min',patience=15,verbose=True,restore_best_weights=True))
+          ,validation_data=(x_test,y_test),callbacks=EarlyStopping(monitor='val_acc',mode='max',patience=15,verbose=True,restore_best_weights=True))
 del x_train,x_test
 
 weights = model.get_weights()
@@ -109,7 +109,11 @@ date=datetime.datetime.now()
 date = date.strftime('%m월%d일 %H시%M분')
 
 music_sample=('Crossing!','Dreaming!','Flyers!!!','GlowMap','Harmony4You','Rainbow','UNION!!')
-index = list(set(range(7))-set(np.load(f"d:/study_data/_project/_data/musicindex.npy")))
+index=set(np.load(f"d:/study_data/_project/_data/musicindex.npy"))
+if len(index)==len(music_sample):
+    index=[0]
+else : index = list(set(range(7))-set(np.load(f"d:/study_data/_project/_data/musicindex.npy")))
+# index = list(set(range(7))-set(np.load(f"d:/study_data/_project/_data/musicindex.npy")))
 musics=(music_sample[i] for i in index)
 idolnum = np.load(file_path("npy", "idolnum"))
 count=0
@@ -131,7 +135,7 @@ for folder in musics:
             correct+=1
 acc=round(correct/count,2)
 print(f'acc : {acc}')
-model.save(f'D:\study_data\_project\model/stft_model_test13_{acc}.h5')
+model.save(f'D:\study_data\_project\model/stft_model_test_{acc}.h5')
 
 import matplotlib.pyplot as plt
 plt.subplot(1,2,1)

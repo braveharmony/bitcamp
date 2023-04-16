@@ -63,7 +63,7 @@ for data in ['sklearn','pandas']:
             x,y=i(return_X_y=True)
             do_models(x,y)
             print(f'{i.__name__} is finished')
-    else :
+    elif data=='pandas':
         for i in pd_path:
             datasets=pd.read_csv(i+'train.csv',index_col=0)
             datasets=datasets.dropna()

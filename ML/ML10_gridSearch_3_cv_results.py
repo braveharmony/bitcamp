@@ -32,3 +32,10 @@ print(f'최적의 매개변수 : {model.best_params_}\n최적의 파라미터 : 
 print(f'acc : {accuracy_score(y_test,model.predict(x_test))}')
 print(f'best acc : {accuracy_score(y_test,model.best_estimator_.predict(x_test))}')
 print(f'걸린 시간 : {round(time()-startTime,2)}초')
+
+import pandas as pd
+
+print(pd.DataFrame(model.cv_results_).sort_values('rank_test_score',ascending=True))
+print(pd.DataFrame(model.cv_results_).columns)
+path='./temp/'
+pd.DataFrame(model.cv_results_).sort_values('rank_test_score',ascending=True).to_csv(path+'m10Gridsearch3.csv')

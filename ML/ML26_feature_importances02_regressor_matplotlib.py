@@ -11,6 +11,7 @@ from sklearn.metrics import accuracy_score
 from xgboost import XGBRegressor
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+
 # 0. seed initialization
 seed=0
 random.seed(seed)
@@ -71,11 +72,3 @@ plt.show()
 # print(f'model score : {pipe.score(x_test,y_test)}\nacc : {accuracy_score(y_test,pipe.predict(x_test))}')
 # #==============================================================================================
 
-# #==============================================================================================
-# # 2. model build
-# model=make_pipeline(MinMaxScaler(),RandomForestClassifier())
-# # 3. compile,training
-# model.fit(x_train,y_train)
-# # 4. evaluate,predict
-# print(f'model score : {model.score(x_test,y_test)}\nacc : {accuracy_score(y_test,model.predict(x_test))}')
-# #==============================================================================================

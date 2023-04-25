@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-from sklearn.datasets import load_iris,load_diabetes
 from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split
 import random
@@ -19,10 +18,12 @@ def run_model(x,y,label:str=''):
     print(f'model score : {model.score(x_test,y_test)}')
     
 
-dataset=load_diabetes()
+path='./_data/kaggle_bike/'
+df=pd.read_csv(path+'train.csv',index_col=0)
+df=df.dropna()
+x=df.drop([df.columns[-1]],axis=1)
+y=np.array(df[[df.columns[-1]]]).reshape((-1,))
 
-x=dataset['data']
-y=dataset['target']
 
 run_model(x,y,'PCA이전')
 

@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from sklearn.datasets import load_iris,load_diabetes
+from sklearn.datasets import load_iris
 from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split
 import random
@@ -19,7 +19,7 @@ def run_model(x,y,label:str=''):
     print(f'model score : {model.score(x_test,y_test)}')
     
 
-dataset=load_diabetes()
+dataset=load_iris()
 
 x=dataset['data']
 y=dataset['target']

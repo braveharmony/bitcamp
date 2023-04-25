@@ -1,0 +1,3 @@
+testcase = int(input())
+for i in range(testcase):
+    print(f'Case #{i+1}: {sum(map(int, input().split()))}')

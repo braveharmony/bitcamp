@@ -50,7 +50,7 @@ def run_model(x,y,name):
     # path='./temp/'
     # pd.DataFrame(model.cv_results_).sort_values('rank_test_score',ascending=True).to_csv(path+f'{name}_m10Gridsearch3.csv')
 from sklearn.decomposition import PCA
-for i in [load_iris,load_breast_cancer,load_wine,load_digits,fetch_covtype]:
+for i in [load_iris,load_breast_cancer,load_wine,load_digits]:
     x,y=i(return_X_y=True)
     pca=PCA(n_components=x.shape[1]//2)
     run_model(x,y,i.__name__)

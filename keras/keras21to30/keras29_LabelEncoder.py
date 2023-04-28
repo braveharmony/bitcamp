@@ -10,7 +10,6 @@ tc=24
 
 # 1. 데이터
 import pandas as pd
-import pandas_profiling as pp
 path="./_data/dacon_wine/"
 path_save='./_save/dacon_wine/'
 df=pd.read_csv(path+'train.csv',index_col=0)

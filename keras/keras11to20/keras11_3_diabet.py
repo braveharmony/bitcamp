@@ -29,13 +29,13 @@ x_train,x_test,y_train,y_test=train_test_split(x,y,train_size=0.7,random_state=s
  # 2. model build
 model=Sequential()
 model.add(Dense(1,input_dim=10,activation='linear'))
-model.add(Dense(1,activation='linear'))
-model.add(Dense(1,activation='linear'))
+model.add(Dense(64,activation='linear'))
+model.add(Dense(64,activation='linear'))
 model.add(Dense(1,activation='linear'))
 
 # 3. compile, training
 model.compile(loss='mse',optimizer='adam')
-model.fit(x_train,y_train,batch_size=1000,epochs=10000)
+model.fit(x_train,y_train,batch_size=1000,epochs=1000)
 
 
 # 4. evaluate, predict

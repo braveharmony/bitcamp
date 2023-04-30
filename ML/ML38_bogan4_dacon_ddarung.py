@@ -13,6 +13,7 @@ dfs.append(df.fillna(df.median()))
 dfs.append(df.fillna(method='ffill'))
 dfs.append(df.fillna(method='bfill'))
 dfs.append(df.interpolate().fillna(method='bfill'))
+
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import SimpleImputer,KNNImputer,IterativeImputer
 from xgboost import XGBRegressor
@@ -22,6 +23,7 @@ imputer=KNNImputer()
 dfs.append(imputer.fit_transform(df))
 imputer=IterativeImputer(estimator=XGBRegressor())
 dfs.append(imputer.fit_transform(df))
+
 
 def runpandasmodel(df:pd.DataFrame):
     model=XGBRegressor(tree_method='gpu_hist',

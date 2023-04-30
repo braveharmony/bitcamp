@@ -18,6 +18,7 @@ dfs.append(df.fillna(df.median()))
 dfs.append(df.fillna(method='ffill'))
 dfs.append(df.fillna(method='bfill'))
 dfs.append(df.interpolate().fillna(method='bfill'))
+
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import SimpleImputer,KNNImputer,IterativeImputer
 from xgboost import XGBRegressor

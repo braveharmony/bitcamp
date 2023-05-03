@@ -42,7 +42,7 @@ x_train,x_test,y_train,y_test=train_test_split(x,y,train_size=0.8,shuffle=True)
 
 
 parameters={'n_estimators' : 10000,#디폴트 100,1~inf,int
-            'learning_rate' : 0.3,#디폴트 0.3/0~1/float
+            'learning_rate' : 0.06,#디폴트 0.3/0~1/float
             'max_depth':10,#디폴트 6/0~inf/int
             'gamma':1,#디폴트 0/0~inf/float
             'min_child_weight':1,#디폴트 1/0~inf/float

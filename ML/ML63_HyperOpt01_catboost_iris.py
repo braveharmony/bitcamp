@@ -22,13 +22,13 @@ search_space={
 # hp.uniform(label,low,high)
 # hp.randint(label,upper)
 # hp.loguniform(label,low,hogh)
-def y_function(dataset,*args,**para):
+def run_y_function(dataset,*args,**para):
     # para['max_depth']=int(para['max_depth'])
     # para['num_leaves']=int(para['num_leaves'])
     # para['min_child_samples']=int(para['min_child_samples'])
     # para['max_bin']=int(para['max_bin'])
     from sklearn.datasets import load_iris
-    x,y=load_iris(return_X_y=True)
+    x,y=dataset(return_X_y=True)
     from sklearn.model_selection import train_test_split
     x_train,x_test,y_train,y_test=train_test_split(x,y,train_size=0.8,random_state=0)
     from sklearn.preprocessing import RobustScaler
@@ -43,10 +43,73 @@ def y_function(dataset,*args,**para):
     from sklearn.metrics import r2_score,mean_squared_error
     return mean_squared_error(y_test,model.predict(x_test))
 
+def y_function_iris(*args,**para):
+    from sklearn.datasets import load_iris
+    return run_y_function(load_iris,*args,**para)
+def y_function_cov(*args,**para):
+    from sklearn.datasets import fetch_covtype
+    return run_y_function(*args,**para)
+def y_function_wine(*args,**para):
+    from sklearn.datasets import load_wine
+    return run_y_function(*args,**para)
+def y_function_dig(*args,**para):
+    from sklearn.datasets import load_digits
+    return run_y_function(*args,**para)
+def y_function_bre(*args,**para):
+    from sklearn.datasets import load_breast_cancer
+    return run_y_function(*args,**para)
+    
+
+
 trial_val=Trials()
 
 best=fmin(
-    fn=y_function,
+    fn=y_function_iris,
+    space=search_space,
+    algo=tpe.suggest,
+    trials=trial_val,
+    max_evals=100,
+    # rstate=np.random.default_rng(seed=10)
+)
+print(best)
+
+trial_val=Trials()
+
+best=fmin(
+    fn=y_function_cov,
+    space=search_space,
+    algo=tpe.suggest,
+    trials=trial_val,
+    max_evals=100,
+    # rstate=np.random.default_rng(seed=10)
+)
+print(best)
+trial_val=Trials()
+
+best=fmin(
+    fn=y_function_wine,
+    space=search_space,
+    algo=tpe.suggest,
+    trials=trial_val,
+    max_evals=100,
+    # rstate=np.random.default_rng(seed=10)
+)
+print(best)
+trial_val=Trials()
+
+best=fmin(
+    fn=y_function_dig,
+    space=search_space,
+    algo=tpe.suggest,
+    trials=trial_val,
+    max_evals=100,
+    # rstate=np.random.default_rng(seed=10)
+)
+print(best)
+trial_val=Trials()
+
+best=fmin(
+    fn=y_function_bre,
     space=search_space,
     algo=tpe.suggest,
     trials=trial_val,

@@ -25,7 +25,6 @@ def run_model_with_drop(dataset_class=load_iris
     datasets=dataset_class()
     df=pd.DataFrame(datasets.data,columns=datasets.feature_names)
     df['target']=datasets.target
-    print(df)
 
 
     y=df['target']

@@ -23,3 +23,22 @@ print(sess.run(w))
 
 x=tf.compat.v1.placeholder(tf.float32)
 y=tf.compat.v1.placeholder(tf.float32)
+
+
+hypothesis=x*w+b
+
+mse=tf.compat.v1.reduce_mean(tf.compat.v1.square(hypothesis-y))
+
+optimizer=tf.compat.v1.train.GradientDescentOptimizer(learning_rate=0.01)
+
+train=optimizer.minimize(loss=mse)
+
+sess=tf.compat.v1.Session()
+sess.run(tf.compat.v1.global_variables_initializer())
+
+epochs=10000
+
+for epoch in range(1,epochs+1):
+    sess.run(train,feed_dict={x:x_train,y:y_train})
+    if epoch%100==0:
+        print(f'epoch : {epoch}, loss : {sess.run(mse,feed_dict={x:x_train,y:y_train})}, w : {sess.run(w)}, b : {sess.run(b)}')

@@ -15,7 +15,7 @@ y_train=[1,2,3]
 
 # 2. model build
 w=tf.compat.v1.Variable(111,dtype=tf.float32)
-b=tf.compat.v1.Variable(0,dtype=tf.float32)
+b=tf.compat.v1.Variable(100,dtype=tf.float32)
 
 x = tf.compat.v1.placeholder(tf.float32)
 y = tf.compat.v1.placeholder(tf.float32)

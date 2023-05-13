@@ -45,7 +45,7 @@ train=optimizer.minimize(loss)
 
 min_loss = np.inf
 counter = 0
-patience = 500  # 원하는 patience 값을 설정하세요.
+patience = 500
 weights = {
     'w1': None,
     'b1': None,
@@ -74,7 +74,6 @@ for step in range(1,epochs+1):
         print("Early stopping")
         break
 
-# 최적 가중치로 복원
 sess.run(w1.assign(weights['w1']))
 sess.run(b1.assign(weights['b1']))
 sess.run(w2.assign(weights['w2']))

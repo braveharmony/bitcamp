@@ -38,7 +38,7 @@ sess=tf.compat.v1.Session()
 sess.run(tf.compat.v1.global_variables_initializer())
 
 
-epochs = 100000
+epochs = 10000
 for epoch in range(1,epochs+1):
     sess.run(train,feed_dict={x:x_train,y:y_train})
     if epoch % 100 == 0:

@@ -36,16 +36,16 @@ layer1=tf.compat.v1.matmul(x,w1)+b1
 
 layer1=0.5*tf.compat.v1.nn.relu(layer1)+0.5
 
-w2=tf.compat.v1.Variable(tf.compat.v1.random_normal([8,1]),dtype=tf.float32)
+w2=tf.compat.v1.Variable(tf.compat.v1.random_normal([8,3]),dtype=tf.float32)
 b2=tf.compat.v1.Variable(tf.compat.v1.random_normal([3]),dtype=tf.float32)
 layer2=tf.compat.v1.matmul(layer1,w2)+b2
 
-hypothesis=tf.compat.v1.nn.softmax(layer2)
+hypothesis=layer2
 
 epsilon=1e-7
-# loss=tf.compat.v1.reduce_mean(tf.compat.v1.square(hypothesis-y))
-loss = -tf.compat.v1.reduce_mean(tf.compat.v1.reduce_sum(y*tf.compat.v1.math.log(hypothesis+epsilon), axis=1))
-optimizer=tf.compat.v1.train.AdamOptimizer(learning_rate=0.01)
+loss=tf.compat.v1.reduce_mean(tf.compat.v1.square(hypothesis-y))
+# loss = -tf.compat.v1.reduce_mean(tf.compat.v1.reduce_sum(y*tf.compat.v1.math.log(hypothesis+epsilon), axis=1))
+optimizer=tf.compat.v1.train.AdamOptimizer(learning_rate=0.0001)
 
 train=optimizer.minimize(loss=loss)
 

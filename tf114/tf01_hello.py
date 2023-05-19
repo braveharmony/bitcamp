@@ -11,6 +11,5 @@ print('Hello World!')
 
 tensor=tf.constant('Hello World!')
 print(tensor)
-
 sess=tf.compat.v1.Session()
 print(sess.run(tensor).decode('utf-8'))

@@ -8,6 +8,7 @@ from tensorflow.keras.models import Sequential,Model
 from tensorflow.keras.layers import Dense,Conv2D,Flatten,MaxPool2D,Input,Dropout
 from sklearn.preprocessing import StandardScaler,MinMaxScaler
 from tensorflow.keras.optimizers import Adam,Adadelta,RMSprop
+
 # 0.seed initialization
 seed=42
 random.seed(seed)

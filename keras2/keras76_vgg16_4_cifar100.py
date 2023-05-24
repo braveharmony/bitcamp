@@ -1,5 +1,5 @@
 from tensorflow.keras.applications import VGG16,ResNet50V2
-from tensorflow.keras.datasets import cifar10
+from tensorflow.keras.datasets import cifar100
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense,Conv2D,Dropout,Flatten
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
@@ -7,7 +7,7 @@ from tensorflow.keras.callbacks import EarlyStopping
 from sklearn.metrics import accuracy_score
 import numpy as np
 # 1. dataprepare
-(x_train,y_train),(x_test,y_test)=cifar10.load_data()
+(x_train,y_train),(x_test,y_test)=cifar100.load_data()
 x_train=x_train/255.
 x_test=x_test/255.
 
@@ -24,7 +24,7 @@ model.add(Dense(512,activation='relu'))
 model.add(Dropout(1/16))
 model.add(Dense(512,activation='relu'))
 model.add(Dropout(1/16))
-model.add(Dense(10,activation='softmax'))
+model.add(Dense(100,activation='softmax'))
 model.summary()
 
 model.compile(loss='sparse_categorical_crossentropy',optimizer='adam',metrics='acc')
@@ -46,7 +46,7 @@ model.add(Dense(512,activation='relu'))
 model.add(Dropout(1/16))
 model.add(Dense(512,activation='relu'))
 model.add(Dropout(1/16))
-model.add(Dense(10,activation='softmax'))
+model.add(Dense(100,activation='softmax'))
 model.summary()
 
 model.compile(loss='sparse_categorical_crossentropy',optimizer='adam',metrics='acc')
@@ -55,6 +55,7 @@ acc_train=accuracy_score(y_test,np.argmax(model.predict(x_test),axis=1))
 
 print(f"acc with no trained : {acc_no_trained}\nacc with trained : {acc_train}\nacc with combination trained : {acc_trained_after_fitting_Dense}")
 
-# acc with no trained : 0.6281
-# acc with trained : 0.8142
-# acc with combination trained : 0.82
+
+# acc with no trained : 0.3713
+# acc with trained : 0.01
+# acc with combination trained : 0.4408
